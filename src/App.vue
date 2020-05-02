@@ -1,19 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HelloWorld msg="Hello World!"/>
+    <Wallet/>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import Wallet from './components/Wallet.vue'
+import hmy from "./js/hmy.js"
+
+console.log(hmy);
+//window.addEventListener("load", alert("loadx"));
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    Wallet
   }
 }
+//const D = console.log;
 </script>
 
 <style>
