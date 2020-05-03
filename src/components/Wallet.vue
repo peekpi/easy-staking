@@ -14,13 +14,17 @@
           <Input v-model="transferTo" placeholder="address" />
           <br />
           <label>amount:</label>
-          <Input-number :max="10" :min="1" v-model="transferRAW" />ONE
+          <Input v-model="transferRAW">
+            <Select v-model="unit" slot="append" style="width: 70px">
+              <Option value="one">ONE</Option>
+              <Option value="wei">wei</Option>
+            </Select>
+          </Input>
           <br />
           <Button type="primary" @click="transfer">transfer</Button>
           <br />
           {{ transferAmount }}
         </div>
-
       </Content>
       <Footer></Footer>
     </Layout>
@@ -36,7 +40,7 @@ export default {
       transferTo: 0,
       transferAmount: 0,
       transferRAW: null,
-      counter: 1
+      unit: "wei"
     };
   },
   methods: {
@@ -94,7 +98,7 @@ ul {
   padding: 0;
 }
 li {
-  display: inline-block;
+  /*display: inline-block;*/
   margin: 0 10px;
 }
 a {
