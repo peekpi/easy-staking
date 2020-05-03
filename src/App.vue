@@ -1,27 +1,13 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Hello World!"/>
-    <Wallet/>
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/wallet">Wallet</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-import Wallet from './components/Wallet.vue'
-import hmy from "./js/hmy.js"
-
-console.log(hmy);
-//window.addEventListener("load", alert("loadx"));
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld,
-    Wallet
-  }
-}
-//const D = console.log;
-</script>
 
 <style>
 #app {
@@ -30,6 +16,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>

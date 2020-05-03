@@ -5,9 +5,6 @@
 </template>
 
 <script>
-
-import hmy from "../js/hmy.js"
-console.log("2:", hmy);
 export default {
   name: 'HelloWorld',
   props: {
