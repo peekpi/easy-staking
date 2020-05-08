@@ -1,7 +1,6 @@
 <template>
   <div>
     <Layout class="layout">
-      <Header></Header>
       <Content>
         <Button @click="login" type="primary">login</Button>
         <div>
@@ -26,7 +25,6 @@
           {{ transferAmount }} wei
         </div>
       </Content>
-      <Footer></Footer>
     </Layout>
   </div>
 </template>
@@ -38,7 +36,7 @@ export default {
     return {
       account: {},
       transferTo: "",
-      transferRAW: null,
+      transferRAW: "",
       unit: "wei"
     };
   },
@@ -66,7 +64,7 @@ export default {
       let tx = hmy.transfer(
         this.account.address,
         this.transferTo,
-        this.transferAmount(),
+        this.transferAmount,
       );
       window.tx = tx;
       window.harmony.signTransaction(tx);
@@ -87,11 +85,12 @@ export default {
   computed: {
     transferAmount: function(){
       try{
+        if(this.transferRAW==null) return "-";
         const hmy = this.$root.hmy.hmy;
         if(this.unit == "one")
           return hmy.utils.toWei(this.transferRAW, "one");
         return hmy.utils.fromWei(this.transferRAW, "wei");
-      }catch{
+      }catch(e){
         return 0;
       }
     }
@@ -101,6 +100,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.div {
+   text-align: center;
+}
 h3 {
   margin: 40px 0 0;
 }

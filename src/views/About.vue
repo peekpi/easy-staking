@@ -26,12 +26,14 @@ import Avatar from "@/components/common/Avatar";
 
 //let run =false;
 export default {
+  name: "aboutHome",
   components: {
     Avatar
   },
   data() {
-    this.$store.dispatch("getValidators").then(() => (this.loading = false));
-    return { loading: true };
+    if(this.$store.state.validators.length == 0)
+      this.$store.dispatch("getValidators").then(() => (this.loading = false));
+    return { loading: this.$store.state.validators.length == 0 };
   },
   computed: {
     validators() {
