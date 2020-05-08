@@ -54,13 +54,39 @@ function logout() {
   return window.harmony.forgetIdentity();
 }
 
+function delegate(from, to, amount) {
+  let tx = hmy.stakings.delegate({
+    delegatorAddress: from,
+    validatorAddress: to,
+    amount: new hmy.utils.Unit(amount).asWei().toHex()
+  }).setTxParams({
+    gasPrice: "0x100000000000",
+    gasLimit: "0x0927c0"
+  }).build();
+  tx.setFromAddress(from);
+  return tx;
+}
+
+function undelegate(from, to, amount) {
+  let tx = hmy.stakings.undelegate({
+    delegatorAddress: from,
+    validatorAddress: to,
+    amount: new hmy.utils.Unit(amount).asWei().toHex()
+  }).setTxParams({
+    gasPrice: "0x100000000000",
+    gasLimit: "0x0927c0"
+  }).build();
+  tx.setFromAddress(from);
+  return tx;
+}
+
 function transfer(from, to, amount) {
   return hmy.transactions.newTx({
     from,
     //  token send to
     to,
     // amount to send
-    value: amount,
+    value: new hmy.utils.Unit(amount).asWei().toHex(),
     // gas limit, you can use string
     gasLimit: '210000',
     // send token from shardID
@@ -77,5 +103,7 @@ export default {
   login,
   logout,
   transfer,
+  delegate,
+  undelegate
 }
 

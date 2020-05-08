@@ -20,7 +20,9 @@
             </Select>
           </Input>
           <br />
-          <Button type="primary" @click="transfer">transfer</Button>
+          <Button type="primary" @click="transfer">transfer</Button>|
+          <Button type="primary" @click="delegate">delegate</Button>|
+          <Button type="primary" @click="undelegate">undelegate</Button>
           <br />
           {{ transferAmount }} wei
         </div>
@@ -46,12 +48,11 @@ export default {
       if (this.account.address) {
         await window.harmony.forgetIdentity();
         this.account = {};
-      } else {
-        this.account = await window.harmony.getAccount();
-        const hmy = this.$root.hmy.hmy;
-        let balance = await hmy.blockchain.getBalance(this.account);
-        this.$set(this.account, "balance", balance.result);
       }
+      this.account = await window.harmony.getAccount();
+      const hmy = this.$root.hmy.hmy;
+      let balance = await hmy.blockchain.getBalance(this.account);
+      this.$set(this.account, "balance", balance.result);
     },
     toOne: function(amount, unit) {
       if (!amount) return "-";
@@ -59,16 +60,38 @@ export default {
       if (unit == 0) return hmy.utils.hexToNumber(amount);
       return hmy.utils.hexToNumber(amount) / 10 ** unit;
     },
-    transfer: function() {
+    transfer: async function() {
       const hmy = this.$root.hmy;
       let tx = hmy.transfer(
         this.account.address,
         this.transferTo,
-        this.transferAmount,
+        this.transferAmount
       );
       window.tx = tx;
-      window.harmony.signTransaction(tx);
+      await window.harmony.signTransaction(tx);
       tx.sendTransaction();
+    },
+    async delegate() {
+      const hmy = this.$root.hmy;
+      let tx = hmy.delegate(
+        this.account.address,
+        this.transferTo,
+        this.transferAmount
+      );
+      window.dtx = tx;
+      await window.harmony.signTransaction(tx);
+      //tx.sendTransaction();
+    },
+    async undelegate() {
+      const hmy = this.$root.hmy;
+      let tx = hmy.undelegate(
+        this.account.address,
+        this.transferTo,
+        this.transferAmount
+      );
+      window.udtx = tx;
+      await window.harmony.signTransaction(tx);
+      //tx.sendTransaction();
     }
   },
   watch: {
@@ -83,14 +106,13 @@ export default {
     }*/
   },
   computed: {
-    transferAmount: function(){
-      try{
-        if(this.transferRAW==null) return "-";
+    transferAmount: function() {
+      try {
+        if (this.transferRAW == null) return "-";
         const hmy = this.$root.hmy.hmy;
-        if(this.unit == "one")
-          return hmy.utils.toWei(this.transferRAW, "one");
+        if (this.unit == "one") return hmy.utils.toWei(this.transferRAW, "one");
         return hmy.utils.fromWei(this.transferRAW, "wei");
-      }catch(e){
+      } catch (e) {
         return 0;
       }
     }
@@ -101,7 +123,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .div {
-   text-align: center;
+  text-align: center;
 }
 h3 {
   margin: 40px 0 0;
@@ -111,7 +133,7 @@ ul {
   padding: 0;
 }
 li {
-  /*display: inline-block;*/
+  display: inline-block;
   margin: 0 10px;
 }
 a {
