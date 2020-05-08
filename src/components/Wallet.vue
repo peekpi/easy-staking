@@ -14,7 +14,7 @@
           <Input v-model="transferTo" placeholder="address" />
           <br />
           <label>amount:</label>
-          <Input v-model="transferRAW">
+          <Input v-model="transferRAW" placeholder="amount">
             <Select v-model="unit" slot="append" style="width: 70px">
               <Option value="one">ONE</Option>
               <Option value="wei">wei</Option>
@@ -23,7 +23,7 @@
           <br />
           <Button type="primary" @click="transfer">transfer</Button>
           <br />
-          {{ transferAmount }}
+          {{ transferAmount }} wei
         </div>
       </Content>
       <Footer></Footer>
@@ -37,8 +37,7 @@ export default {
   data: function() {
     return {
       account: {},
-      transferTo: 0,
-      transferAmount: 0,
+      transferTo: "",
       transferRAW: null,
       unit: "wei"
     };
@@ -67,7 +66,7 @@ export default {
       let tx = hmy.transfer(
         this.account.address,
         this.transferTo,
-        this.transferAmount
+        this.transferAmount(),
       );
       window.tx = tx;
       window.harmony.signTransaction(tx);
@@ -75,6 +74,7 @@ export default {
     }
   },
   watch: {
+    /*
     transferRAW: function() {
       try {
         const hmy = this.$root.hmy.hmy;
@@ -82,9 +82,20 @@ export default {
       } catch {
         this.transferAmount = 0;
       }
-    }
+    }*/
   },
-  computed: {}
+  computed: {
+    transferAmount: function(){
+      try{
+        const hmy = this.$root.hmy.hmy;
+        if(this.unit == "one")
+          return hmy.utils.toWei(this.transferRAW, "one");
+        return hmy.utils.fromWei(this.transferRAW, "wei");
+      }catch{
+        return 0;
+      }
+    }
+  }
 };
 </script>
 

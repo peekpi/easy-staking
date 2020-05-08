@@ -9,10 +9,22 @@
   },
   "dependencies": {
     "@harmony-js/core": "^0.1.36",
+    "@dicebear/avatars": "3.1.4",
+    "@dicebear/avatars-jdenticon-sprites": "1.1.4",
+    "jdenticon": "2.2.0",
+    "axios": "^0.19.2",
+    "better-scroll": "^1.15.2",
     "core-js": "^3.6.4",
+    "node-sass": "^4.14.1",
+    "query-string": "^6.12.1",
+    "sass-loader": "^8.0.2",
+    "schema-utils": "^2.6.6",
+    "typescript": "^3.8.3",
     "view-design": "^4.0.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.6"
+    "vue-router": "^3.1.6",
+    "vue-svgicon": "^3.2.6",
+    "vuex": "^3.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",
@@ -37,7 +49,12 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "vue/no-parsing-error": [2, { "x-invalid-end-tag": false }]
+      "vue/no-parsing-error": [
+        2,
+        {
+          "x-invalid-end-tag": false
+        }
+      ]
     }
   },
   "browserslist": [

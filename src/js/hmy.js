@@ -1,6 +1,7 @@
 
 const { Harmony } = require('@harmony-js/core');
 const { ChainID, ChainType } = require('@harmony-js/utils');
+const stakingAPIs = require("./stakingAPIs.json");
 
 const shardID = 0;
 const ostn = "https://api.s0.os.hmny.io"
@@ -16,6 +17,20 @@ const hmy = new Harmony(
     shardID,
   }
 );
+
+stakingAPIs.map(mod=>{
+  let modname = mod.name.split(" ")[0];
+  let methodsObj = {};
+  mod.methods.map(method=>{
+    methodsObj[method.slice(4)] = function(){
+      return hmy.messenger.send(
+        method,
+        Array.from(arguments)
+      ).then(result=>result.getRaw);
+    }
+  });
+  hmy.blockchain[modname] = methodsObj;
+});
 
 window.hmy = hmy;
 
