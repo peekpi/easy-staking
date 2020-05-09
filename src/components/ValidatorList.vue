@@ -12,10 +12,17 @@
         />
         <ListItemMeta
           :title="shortName(item.name)"
-          :description="shortName(item.address)"
-        />
+        >
+          <template slot="description">
+            <span>
+              票数: <b>{{ description(item) }}</b>
+              <span></span>
+              年化: <b>{{ expectedRetrun(item) }}%</b>
+            </span>
+          </template>
+        </ListItemMeta>
         <template slot="action">
-          <Button shape="circle" @click="validatorClick(item)">投票</Button>
+          <Button shape="circle" @click="validatorClick(item)" :loading="loging">投票</Button>
         </template>
       </ListItem>
     </Scroll>
@@ -36,10 +43,12 @@ export default {
     StakingConfirm
   },
   data() {
+    //this.$store.dispatch("login");
     if(this.$store.state.validators.length == 0)
       this.$store.dispatch("getValidators").then(() => (this.loading = false));
     return { 
       loading: this.$store.state.validators.length == 0,
+      loging: false,
       btnTriger: false,
       validatorSelected:{},
     };
@@ -50,15 +59,35 @@ export default {
     }
   },
   methods: {
+    message(type, content) {
+      this.$Message[type]({
+        background: true,
+        content,
+        duration: 3
+      });
+    },
     shortName(name){
       if(name.length>25){
         return name.slice(0,10) + "..." + name.slice(-10)
       }
       return name;
     },
-    validatorClick(item) {
-      this.btnTriger = !this.btnTriger;
-      this.validatorSelected = item;
+    description(item) {
+      return Math.floor(item.total_stake/1e18).toString();
+    },
+    expectedRetrun(item) {
+      return (item.apr * 10).toFixed(2);
+    },
+    async validatorClick(item) {
+      this.loging = true;
+      try{
+        await this.$store.dispatch("login")
+        this.btnTriger = !this.btnTriger;
+        this.validatorSelected = item;
+      }catch(err){
+        this.message("error", err.message);
+      }
+      this.loging = false;
     },
     async handleReachBottom() {
       this.loading = true;

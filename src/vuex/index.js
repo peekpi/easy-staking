@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 import axios from "axios"
 
 import * as crypto from "@harmony-js/crypto"
+
+import hmy from "../js/hmy.js"
 
 const queryString = require("query-string");
 
@@ -91,6 +92,7 @@ function fetchValidatorsWithParams(page=0,size=50) {
 let page = 0;
 export default new Vuex.Store({
     state: {
+        account:{},
         total:0,
         totalActive:0,
         totalFound:0,
@@ -99,6 +101,9 @@ export default new Vuex.Store({
         loaded:false
     },
     mutations: {
+        setAccount(state, account){
+            state.account = account;
+        },
         appendValidators(state, validators) {
             state.validators = state.validators.concat(validators);
         },
@@ -130,6 +135,14 @@ export default new Vuex.Store({
                 commit("setTotal", data.total);
                 commit("setTotalActive", data.total_active);
                 commit("setTotalFound", data.totalFound);
+            }
+        },
+        async login(context) {
+            if(context.state.account.address == undefined){
+              let account = await hmy.login();
+              let balance = await hmy.hmy.blockchain.getBalance(account);
+              account.balance = new hmy.hmy.utils.Unit(balance.result).asWei();
+              context.commit("setAccount", account);
             }
         }
     }

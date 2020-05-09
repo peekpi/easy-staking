@@ -67,7 +67,6 @@ export default {
         this.transferTo,
         this.transferAmount
       );
-      window.tx = tx;
       await window.harmony.signTransaction(tx);
       tx.sendTransaction();
     },
@@ -78,7 +77,6 @@ export default {
         this.transferTo,
         this.transferAmount
       );
-      window.dtx = tx;
       await window.harmony.signTransaction(tx);
       //tx.sendTransaction();
     },
@@ -89,7 +87,6 @@ export default {
         this.transferTo,
         this.transferAmount
       );
-      window.udtx = tx;
       await window.harmony.signTransaction(tx);
       //tx.sendTransaction();
     }

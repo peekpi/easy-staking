@@ -7,6 +7,7 @@ import hmy from "./js/hmy.js"
 
 Vue.config.productionTip = false
 
+// UI library iview's doc: https://www.iviewui.com/docs/introduce-en
 
 new Vue({
   data: {hmy},

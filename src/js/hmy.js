@@ -41,16 +41,16 @@ function sleep(ms){
 async function walletInit() {
   let retry = 0;
   while(!window.harmony && retry++ < 2) await sleep(1000);
-  if(!window.harmony) alert("no wallet detected!");
+  if(!window.harmony) throw({message:"请安装麦子钱包"});
 }
 
-walletInit();
-
-function login() {
+async function login() {
+  await walletInit();
   return window.harmony.getAccount();
 }
 
-function logout() {
+async function logout() {
+  await walletInit();
   return window.harmony.forgetIdentity();
 }
 
@@ -61,9 +61,11 @@ function delegate(from, to, amount) {
     amount: new hmy.utils.Unit(amount).asWei().toHex()
   }).setTxParams({
     gasPrice: "0x100000000000",
-    gasLimit: "0x0927c0"
+    gasLimit: "0x0927c0",
+    chainId: hmy.chainId
   }).build();
   tx.setFromAddress(from);
+  window.dtx = tx;
   return tx;
 }
 
@@ -74,14 +76,16 @@ function undelegate(from, to, amount) {
     amount: new hmy.utils.Unit(amount).asWei().toHex()
   }).setTxParams({
     gasPrice: "0x100000000000",
-    gasLimit: "0x0927c0"
+    gasLimit: "0x0927c0",
+    chainId: hmy.chainId
   }).build();
   tx.setFromAddress(from);
+  window.udtx = tx;
   return tx;
 }
 
-function transfer(from, to, amount) {
-  return hmy.transactions.newTx({
+function transfer(from, to, amount) { 
+  let tx = hmy.transactions.newTx({
     from,
     //  token send to
     to,
@@ -96,6 +100,8 @@ function transfer(from, to, amount) {
     // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
     gasPrice: "100000000000",
   });
+  window.tx = tx;
+  return tx;
 }
 
 export default {
