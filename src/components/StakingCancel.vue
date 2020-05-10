@@ -10,8 +10,9 @@
     >
       <p slot="header" style="color:#f60;text-align:center">
         <span>
-          投票给
-          <i>{{ validator.name }}</i>
+          取消
+          <i>{{ validator.validator_info?validator.validator_info.name:'' }}</i>
+          的投票
         </span>
       </p>
       <div >
@@ -19,7 +20,7 @@
           <Icon type="logo-bitcoin" slot="prepend" />
           <span slot="append">ONE</span>
         </Input>
-        <span style="font-size:smaller">可用余额: {{ parseFloat(balanceOne).toFixed(2) }} <b>ONE</b></span>
+        <span style="font-size:smaller">我的投票: {{ parseFloat(balanceOne).toFixed(2) }} <b>ONE</b></span>
         <Slider v-model="persent" :step="0.1" />
       </div>
     </Modal>
@@ -48,7 +49,7 @@ export default {
         const hmy = this.$root.hmy;
         let account = this.account;
         let amount = new hmy.hmy.utils.Unit(this.amount).asOne().toHex();
-        let tx = hmy.delegate(account.address, this.validator.address, amount);
+        let tx = hmy.undelegate(account.address, this.validator.validator_address, amount);
         await window.harmony.signTransaction(tx);
         let ret = await tx.sendTransaction();
         if(ret[1].slice(0,2) != "0x")
@@ -92,7 +93,7 @@ export default {
     },
     balanceOne(){
         try{
-            return this.account.balance.toOne()
+            return this.validator.amount/1e18;
         }catch{
             return 0;
         }

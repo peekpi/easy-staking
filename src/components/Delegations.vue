@@ -1,28 +1,30 @@
 <template>
   <div>
-  <StakingConfirm :triger="btnTriger" :validator="validatorSelected"/>
+  <StakingCancel :triger="btnTriger" :validator="validatorSelected"/>
   <List border :loading="loading">
     <Scroll :on-reach-bottom="handleReachBottom" height="600">
-      <ListItem v-for="(item, index) in validators" :key="index">
+      <ListItem v-for="(item, index) in delegations" :key="index">
         {{ index }}
         <Avatar
           class="li-validator-image"
-          :alt="item.address"
-          :address="item.address"
+          :alt="item.validator_address"
+          :address="item.validator_address"
         />
         <ListItemMeta
-          :title="shortName(item.name)"
+          :title="shortName(item.validator_info.name)"
         >
           <template slot="description">
             <span>
-              票数: <b>{{ description(item) }}</b>
+              我的票数: <b>{{ toOneInt(item.amount) }}</b>
               <span></span>
-              年化: <b>{{ expectedRetrun(item) }}%</b>
+              我的收益: <b>{{ toOneInt(item.reward) }}</b>
+              <span></span>
+              赎回中: <b> {{ totalLocked(item.Undelegations) }} </b>
             </span>
           </template>
         </ListItemMeta>
         <template slot="action">
-          <Button shape="circle" @click="validatorClick(item)" :loading="loging">投票</Button>
+          <Button shape="circle" @click="validatorClick(item)" :loading="loging">取回投票</Button>
         </template>
       </ListItem>
     </Scroll>
@@ -33,31 +35,31 @@
 //import Validator from "@/components/ValidatorName";
 
 import Avatar from "@/components/common/Avatar";
-import StakingConfirm from "@/components/StakingConfirm";
+import StakingCancel from "@/components/StakingCancel";
 
 //let run =false;
 export default {
   name: "ValidatorList",
   components: {
     Avatar,
-    StakingConfirm
+    StakingCancel
   },
   data() {
     //this.$store.dispatch("login");
-    if(this.$store.state.validators.length == 0)
-      this.$store.dispatch("getValidators").then(() => (this.loading = false)).catch(
+    //if(this.$store.state.delegations.length == 0)
+      this.$store.dispatch("updateDelegations").then(() => (this.loading = false)).catch(
         (e)=>{this.loading=false;this.message("error", e)}
       );
     return { 
-      loading: this.$store.state.validators.length == 0,
+      loading: this.$store.state.delegations.length == 0,
       loging: false,
       btnTriger: false,
       validatorSelected:{},
     };
   },
   computed: {
-    validators() {
-      return this.$store.state.validators;
+    delegations() {
+      return this.$store.state.delegations;
     }
   },
   methods: {
@@ -74,11 +76,13 @@ export default {
       }
       return name;
     },
-    description(item) {
-      return Math.floor(item.total_stake/1e18).toString();
+    toOneInt(amount) {
+      return Math.floor(amount/1e18).toString();
     },
-    expectedRetrun(item) {
-      return (item.apr * 10).toFixed(2);
+    totalLocked(undelegations) {
+      let sum = 0;
+      undelegations.map(x=>{sum+=x.Amount?x.Amount:0});
+      return Math.floor(sum/1e18).toString();
     },
     async validatorClick(item) {
       this.loging = true;
@@ -94,7 +98,7 @@ export default {
     async handleReachBottom() {
       this.loading = true;
       try{
-        await this.$store.dispatch("getValidators");
+        await this.$store.dispatch("updateDelegations");
       }catch(e){
         this.message("error", e)
       }

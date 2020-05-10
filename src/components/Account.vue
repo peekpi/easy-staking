@@ -2,7 +2,7 @@
   <div>
     <div v-if="account.address">
       地址:<a @click="login">{{ address }}</a>
-      余额:{{ balance }} ONE
+      余额:{{ parseFloat(balanceOne).toFixed(2) }} ONE
       我的投票>
     </div>
     <div v-else>
@@ -15,24 +15,22 @@
 export default {
   name: "Account",
   data: function() {
-    return {
-      account: {
-        address: "",
-        balance: ""
-      },
-    };
+    return {};
   },
   methods: {
+    message(type, content) {
+      this.$Message[type]({
+        background: true,
+        content,
+        duration: 3
+      });
+    },
     login: async function() {
-      if (!window.harmony) alert("please install mathwallet!");
-      if (this.account.address) {
-        await window.harmony.forgetIdentity();
-        this.$set(this, "account", {});
-      } else {
-        this.account = await window.harmony.getAccount();
-        const hmy = this.$root.hmy.hmy;
-        let balance = await hmy.blockchain.getBalance(this.account);
-        this.$set(this.account, "balance", balance.result);
+      try{
+        await this.$store.dispatch("logout")
+        await this.$store.dispatch("login")
+      }catch(err){
+        this.message("error", err.message);
       }
     }
   },
@@ -43,11 +41,11 @@ export default {
       if (this.account.address == undefined) return "";
       return this.account.address.slice(0,6) + "..." + this.account.address.slice(-4, -1);
     },
-    balance (){
-      if (this.account.balance == undefined) return "-";
-      const hmy = this.$root.hmy.hmy;
-      window.x = hmy.utils.fromWei(this.account.balance, "one");
-      return parseFloat(hmy.utils.fromWei(this.account.balance, "one")).toFixed(2);
+    balanceOne(){
+      return this.account.balance.toOne();
+    },
+    account(){
+      return this.$store.state.account;
     }
   }
 };
