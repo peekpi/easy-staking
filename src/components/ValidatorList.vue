@@ -1,5 +1,8 @@
 <template>
   <div>
+  <ValidatorProfile v-if="true" :validator="validatorSelected"/>
+  <ValidatorStatus v-if="true" :validator="validatorSelected"/>
+  <ValidatorInfo v-if="true" :validator="validatorSelected"/>
   <StakingConfirm :triger="btnTriger" :validator="validatorSelected"/>
   <List border :loading="loading">
     <Scroll :on-reach-bottom="handleReachBottom" height="600">
@@ -30,7 +33,9 @@
   </div>
 </template>
 <script>
-//import Validator from "@/components/ValidatorName";
+import ValidatorInfo from "@/components/ValidatorInfo";
+import ValidatorProfile from "@/components/ValidatorProfile";
+import ValidatorStatus from "@/components/ValidatorStatus";
 
 import Avatar from "@/components/common/Avatar";
 import StakingConfirm from "@/components/StakingConfirm";
@@ -40,7 +45,10 @@ export default {
   name: "ValidatorList",
   components: {
     Avatar,
-    StakingConfirm
+    StakingConfirm,
+    ValidatorInfo,
+    ValidatorProfile,
+    ValidatorStatus
   },
   data() {
     //this.$store.dispatch("login");
@@ -81,15 +89,7 @@ export default {
       return (item.apr * 10).toFixed(2);
     },
     async validatorClick(item) {
-      this.loging = true;
-      try{
-        await this.$store.dispatch("login")
-        this.btnTriger = !this.btnTriger;
         this.validatorSelected = item;
-      }catch(err){
-        this.message("error", err.message);
-      }
-      this.loging = false;
     },
     async handleReachBottom() {
       this.loading = true;
