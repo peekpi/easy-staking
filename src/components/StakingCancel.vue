@@ -50,15 +50,10 @@ export default {
         let account = this.account;
         let amount = new hmy.hmy.utils.Unit(this.amount).asOne().toHex();
         let tx = hmy.undelegate(account.address, this.validator.validator_address, amount);
-        await window.harmony.signTransaction(tx);
-        let ret = await tx.sendTransaction();
-        if(ret[1].slice(0,2) != "0x")
-            throw {message:ret[1]};
-        this.message("success", "交易哈希:"+ret[1]);
+        await this.$store.dispatch("txCommit", tx);
+        this.message("success", "交易哈希:"+tx.id);
       } catch (err) {
-        let message = "失败";
-        if (err.message) message = err.message;
-        this.message("error", message);
+        this.message("error", err.message?err.message:err);
       }
       this.enable = false;
     }

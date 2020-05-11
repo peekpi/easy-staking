@@ -107,7 +107,8 @@ export default new Vuex.Store({
     totalFound: 0,
     validators: [],
     loading: false,
-    loaded: false
+    loaded: false,
+    txRecord:[]
   },
   mutations: {
     setAccount(state, account) {
@@ -134,6 +135,9 @@ export default new Vuex.Store({
     },
     setDelegations(state, delegations) {
       state.delegations = delegations;
+    },
+    appendTx(state, tx){
+      state.txRecord.push(tx);
     }
   },
   actions: {
@@ -155,6 +159,7 @@ export default new Vuex.Store({
       context.commit("setDelegations", data);
     },
     async login(context) {
+      window.vuex = this;
       if (context.state.account.address == undefined) {
         let account = await hmy.login();
         let balance = await hmy.hmy.blockchain.getBalance(account);
@@ -167,6 +172,11 @@ export default new Vuex.Store({
         await hmy.logout();
         context.commit("setAccount", {});
       }
+    },
+    async txCommit(context, tx) {
+      await hmy.txSignSend(tx);
+      //await sentTxn.confirm(tx.id, 5);
+      context.commit("appendTx", tx);
     }
   }
 })

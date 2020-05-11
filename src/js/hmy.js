@@ -104,12 +104,20 @@ function transfer(from, to, amount) {
   return tx;
 }
 
+async function txSignSend(tx) {
+  await window.harmony.signTransaction(tx);
+  let ret = await tx.sendTransaction();
+  if(ret[1] != tx.id) throw {message:ret[1]};
+  return tx;
+}
+
 export default {
   hmy,
   login,
   logout,
   transfer,
   delegate,
-  undelegate
+  undelegate,
+  txSignSend
 }
 

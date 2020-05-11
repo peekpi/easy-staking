@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <Button type="primary" @click="click"/>
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
@@ -11,6 +12,18 @@ import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'Home',
+  methods:{
+    message(type, content) {
+      this.$Message[type]({
+        background: true,
+        content,
+        duration: 3
+      });
+    },
+    click(){
+      this.message("error",'<HelloWorld msg="HI"/>');
+    }
+  },
   components: {
     HelloWorld
   }
