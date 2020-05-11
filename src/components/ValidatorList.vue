@@ -1,8 +1,6 @@
 <template>
   <div>
-  <ValidatorProfile v-if="true" :validator="validatorSelected"/>
-  <ValidatorStatus v-if="true" :validator="validatorSelected"/>
-  <ValidatorInfo v-if="true" :validator="validatorSelected"/>
+  <ValidatorPage v-if="validatorSelected.name!=undefined" :validator="validatorSelected"/>
   <StakingConfirm :triger="btnTriger" :validator="validatorSelected"/>
   <List border :loading="loading">
     <Scroll :on-reach-bottom="handleReachBottom" height="600">
@@ -33,9 +31,7 @@
   </div>
 </template>
 <script>
-import ValidatorInfo from "@/components/ValidatorInfo";
-import ValidatorProfile from "@/components/ValidatorProfile";
-import ValidatorStatus from "@/components/ValidatorStatus";
+import ValidatorPage from "@/components/ValidatorPage";
 
 import Avatar from "@/components/common/Avatar";
 import StakingConfirm from "@/components/StakingConfirm";
@@ -46,9 +42,7 @@ export default {
   components: {
     Avatar,
     StakingConfirm,
-    ValidatorInfo,
-    ValidatorProfile,
-    ValidatorStatus
+    ValidatorPage
   },
   data() {
     //this.$store.dispatch("login");

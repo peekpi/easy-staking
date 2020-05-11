@@ -1,11 +1,9 @@
 <template>
-    <div>
-        <Table disabled-hover stripe border :columns="header" :data="bodyStyle">
-            <template slot="body">
-                <Table disabled-hover :show-header=false stripe border :columns="column" :data="context" />
-            </template>
-        </Table>
-    </div>
+    <Table disabled-hover stripe border :columns="header" :data="bodyStyle">
+        <template slot="body">
+            <Table disabled-hover :show-header=false stripe border :columns="column" :data="context" />
+        </template>
+    </Table>
 </template>
 <script>
 export default {
@@ -21,7 +19,8 @@ export default {
                     title: "节点信息",
                     align: "center",
                     slot: "body",
-                    key: "body"
+                    key: "body",
+                    flush: this.validator.name // "iview's bug?"
                 }
             ];
         },
