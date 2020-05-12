@@ -1,5 +1,5 @@
 <template>
-    <Modal v-model="enable" fullscreen title="Fullscreen Modal">
+    <Modal footer-hide v-model="enable" fullscreen :title="validator.name">
         <ValidatorProfile :validator="validator" />
         <br />
         <ValidatorStatus :validator="validator" />

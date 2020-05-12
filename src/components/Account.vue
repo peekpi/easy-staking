@@ -4,7 +4,7 @@
             地址:
             <a @click="login">{{ address }}</a>
             余额:{{ parseFloat(balanceOne).toFixed(2) }} ONE
-            <span @click="$emit('change', !checked);">我的投票</span>
+            <Button type="text" @click="$emit('change', !checked);">我的投票</Button>
         </div>
         <div v-else>
             <a @click="login">登录</a>
@@ -19,10 +19,10 @@ export default {
         return {};
     },
     model: {
-      prop: 'checked',
-      event: 'change'
+        prop: "checked",
+        event: "change"
     },
-    props:["checked"],
+    props: ["checked"],
     methods: {
         message(type, content) {
             this.$Message[type]({

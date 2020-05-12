@@ -1,6 +1,6 @@
 <template>
   <div>
-    <br>
+    <img src="../img/logo-top-right.png">
     <Account v-model="delegate"/>
     <ValidatorList v-if="delegate" />
     <Delegations v-else/>
