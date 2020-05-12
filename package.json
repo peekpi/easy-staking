@@ -8,13 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@harmony-js/core": "^0.1.36",
     "@dicebear/avatars": "3.1.4",
     "@dicebear/avatars-jdenticon-sprites": "1.1.4",
-    "jdenticon": "2.2.0",
+    "@harmony-js/core": "^0.1.36",
     "axios": "^0.19.2",
     "better-scroll": "^1.15.2",
+    "bignumber.js": "^9.0.0",
     "core-js": "^3.6.4",
+    "jdenticon": "2.2.0",
     "node-sass": "^4.14.1",
     "query-string": "^6.12.1",
     "sass-loader": "^8.0.2",

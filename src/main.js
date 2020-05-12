@@ -9,6 +9,9 @@ Vue.config.productionTip = false
 
 // UI library iview's doc: https://www.iviewui.com/docs/introduce-en
 
+
+window.hmy = hmy;
+
 new Vue({
   data: {hmy},
   router,

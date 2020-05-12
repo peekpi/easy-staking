@@ -32,8 +32,6 @@ stakingAPIs.map(mod=>{
   hmy.blockchain[modname] = methodsObj;
 });
 
-window.hmy = hmy;
-
 function sleep(ms){
   return new Promise(resolve => setTimeout(resolve, ms));
 }

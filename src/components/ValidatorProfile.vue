@@ -6,6 +6,8 @@
     </Table>
 </template>
 <script>
+import { ones, zeroDecimals } from "../js/num"
+
 export default {
     data() {
         return {
@@ -31,22 +33,23 @@ export default {
             ];
         },
         context() {
+            let deal = v=>zeroDecimals(ones(v))
             return [
                 {
                     name: "总得票数",
-                    text: this.validator["total_stake"] / 1e18
+                    text: deal(this.validator["total_stake"])
                 },
                 {
                     name: "自抵押票数",
-                    text: this.validator["self_stake"] / 1e18
+                    text: deal(this.validator["self_stake"])
                 },
                 {
                     name: "代理抵押票数",
-                    text: this.validator["delegator_shares"] / 1e18
+                    text: deal(this.validator["delegator_shares"])
                 },
                 {
                     name: "最大可代理票数",
-                    text: this.validator["max_total_delegation"] / 1e18
+                    text: deal(this.validator["max_total_delegation"])
                 }
             ];
         }

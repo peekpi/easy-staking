@@ -1,15 +1,25 @@
 <template>
     <Table disabled-hover stripe border :columns="header" :data="bodyStyle">
         <template slot="body">
-            <Table disabled-hover :show-header=false stripe border :columns="column" :data="context" />
+            <Table
+                disabled-hover
+                :show-header="false"
+                stripe
+                border
+                :columns="column"
+                :data="context"
+            />
         </template>
     </Table>
 </template>
 <script>
+import { percent } from "../js/num";
+let url = web => (web.slice(0, 4) == "http" ? web : "http://" + web);
+
 export default {
     data() {
         return {
-            bodyStyle: [{cellClassName: {body: "nopadding"}}]
+            bodyStyle: [{ cellClassName: { body: "nopadding" } }]
         };
     },
     computed: {
@@ -27,7 +37,25 @@ export default {
         column() {
             return [
                 { key: "name" },
-                { key: "text" }
+                {
+                    key: "text",
+                    render(h, params) {
+                        let row = params.row;
+                        if (row.name == "网站")
+                            return h(
+                                "a",
+                                {
+                                    domProps: {
+                                        href: url(row.text),
+                                        target: "black"
+                                    }
+                                },
+                                row.text
+                            );
+                        return h("span", row.text);
+                        //console.log(params.row);
+                    }
+                }
             ];
         },
         context() {
@@ -50,11 +78,11 @@ export default {
                 },
                 {
                     name: "费率",
-                    text: this.validator["rate"]*100+"%"
+                    text: percent(this.validator["rate"])
                 },
                 {
                     name: "单日最大费率调整",
-                    text: this.validator["max_change_rate"]*100+"%"
+                    text: percent(this.validator["max_change_rate"])
                 }
             ];
         }

@@ -6,6 +6,8 @@
     </Table>
 </template>
 <script>
+import { ones, zeroDecimals, percent } from "../js/num"
+
 export default {
     data() {
         return {
@@ -32,10 +34,11 @@ export default {
             ];
         },
         context() {
+            let deal = v=>zeroDecimals(ones(v))
             return [
                 {
                     name: "出块率",
-                    text: this.validator["uptime_percentage"]*100+"%"
+                    text: percent(this.validator["uptime_percentage"])
                 },
                 {
                     name: "Slots",
@@ -47,11 +50,11 @@ export default {
                 },
                 {
                     name: "七日年化",
-                    text: this.validator["apr"]*100+"%"
+                    text: percent(this.validator["apr"])
                 },
                 {
                     name: "已分红",
-                    text: this.validator["lifetime_reward_accumulated"] / 1e18
+                    text: deal(this.validator["lifetime_reward_accumulated"])
                 }
             ];
         }
