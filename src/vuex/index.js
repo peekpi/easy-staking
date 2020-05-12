@@ -155,7 +155,6 @@ export default new Vuex.Store({
     },
     async updateDelegations(context) {
       let data = await fetchDelegationsByAddress(context.state.account.address);
-      console.log("delegations:", data);
       context.commit("setDelegations", data);
     },
     async login(context) {

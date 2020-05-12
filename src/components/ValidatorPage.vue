@@ -1,12 +1,11 @@
 <template>
-<div>
-    <Button @click="modal11 = true">Open a fullscreen modal</Button>
-    <Modal v-model="modal11" fullscreen title="Fullscreen Modal">
+    <Modal v-model="enable" fullscreen title="Fullscreen Modal">
         <ValidatorProfile :validator="validator" />
+        <br />
         <ValidatorStatus :validator="validator" />
+        <br />
         <ValidatorInfo :validator="validator" />
     </Modal>
-</div>
 </template>
 <script>
 import ValidatorInfo from "@/components/ValidatorInfo";
@@ -16,10 +15,15 @@ import ValidatorStatus from "@/components/ValidatorStatus";
 export default {
     data() {
         return {
-            modal11: false
+            enable: false
         };
     },
-    props: ["validator"],
+    props: ["triger", "validator"],
+    watch: {
+        triger() {
+            if (!this.enable) this.enable = true;
+        }
+    },
     components: {
         ValidatorProfile,
         ValidatorStatus,
