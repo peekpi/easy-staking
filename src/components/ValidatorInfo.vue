@@ -46,7 +46,7 @@ export default {
                                 "a",
                                 {
                                     domProps: {
-                                        href: url(row.text),
+                                        href: url(row.text?row.text:""),
                                         target: "black"
                                     }
                                 },

@@ -3,7 +3,7 @@
         <ValidatorPage :triger="pageTriger" :validator="validatorSelected" />
         <StakingConfirm :triger="btnTriger" :validator="validatorSelected" />
         <List border :loading="loading">
-            <Scroll :on-reach-bottom="handleReachBottom" height="600">
+            <Scroll :on-reach-bottom="handleReachBottom" :height="scrollHeight">
                 <ListItem v-for="(item, index) in validators" :key="index">
                     {{ index }}
                     <Avatar class="li-validator-image" :alt="item.address" :address="item.address" />
@@ -58,7 +58,8 @@ export default {
             loging: false,
             btnTriger: false,
             pageTriger: false,
-            validatorSelected: {}
+            validatorSelected: {},
+            scrollHeight:document.documentElement.clientHeight-85
         };
     },
     computed: {

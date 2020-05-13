@@ -1,13 +1,19 @@
 <template>
-    <div>
+    <div class="margin">
         <div v-if="account.address">
-            地址:
-            <a @click="login">{{ address }}</a>
-            余额:{{ parseFloat(balanceOne).toFixed(2) }} ONE
-            <Button type="text" @click="$emit('change', !checked);">我的投票</Button>
+            <span>
+                地址:
+                <a @click="login">{{ address }}</a>
+                余额:{{ parseFloat(balanceOne).toFixed(2) }} ONE
+            </span>
+            <span  @click.prevent="clickRecord" class="record">
+            <RadioGroup v-model="record" type="button" size="small">
+                <Radio label="true">我的记录</Radio>
+            </RadioGroup>
+            </span>
         </div>
         <div v-else>
-            <a @click="login">登录</a>
+            <Button type="text" size="small" @click="login" :loading="loging">登录</Button>
         </div>
     </div>
 </template>
@@ -16,7 +22,10 @@
 export default {
     name: "Account",
     data: function() {
-        return {};
+        return {
+            record: "",
+            loging:false,
+        };
     },
     model: {
         prop: "checked",
@@ -24,6 +33,10 @@ export default {
     },
     props: ["checked"],
     methods: {
+        clickRecord(){
+            this.record = this.record=="true"?"":"true";
+            this.$emit('change', this.record=="true");
+        },
         message(type, content) {
             this.$Message[type]({
                 background: true,
@@ -32,12 +45,14 @@ export default {
             });
         },
         login: async function() {
+            this.loging=true;
             try {
                 await this.$store.dispatch("logout");
                 await this.$store.dispatch("login");
             } catch (err) {
                 this.message("error", err.message);
             }
+            this.loging=false;
         }
     },
     watch: {},
@@ -62,16 +77,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-    margin: 40px 0 0;
+.margin {
+    margin-left: 1em;
+    height: 1.5em;
+    overflow:hidden;
 }
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-li {
-    /*display: inline-block;*/
-    margin: 0 10px;
+.record {
+    float:right;
 }
 a {
     color: #42b983;
