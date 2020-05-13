@@ -9,7 +9,7 @@
             :validator="validatorInfo"
         />
         <List border :loading="loading">
-            <Scroll height="600">
+            <Scroll :height="scrollHeight">
                 <ListItem v-for="(item, index) in delegations" :key="index">
                     {{ index }}
                     <Avatar
@@ -75,6 +75,7 @@ export default {
         };
     },
     computed: {
+        scrollHeight(){return document.documentElement.clientHeight-85},
         delegations() {
             return this.$store.state.delegations;
         }

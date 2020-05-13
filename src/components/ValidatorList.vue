@@ -58,11 +58,11 @@ export default {
             loging: false,
             btnTriger: false,
             pageTriger: false,
-            validatorSelected: {},
-            scrollHeight:document.documentElement.clientHeight-85
+            validatorSelected: {}
         };
     },
     computed: {
+        scrollHeight(){return document.documentElement.clientHeight-85},
         validators() {
             return this.$store.state.validators;
         }
