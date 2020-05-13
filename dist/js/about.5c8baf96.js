@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["about"],{f820:function(t,n,e){"use strict";e.r(n);var i=function(){var t=this,n=t.$createElement,e=t._self._c||n;return e("div",[e("Button",{attrs:{type:"primary"}}),e("i-switch"),e("i-circle")],1)},c=[],s={data:function(){return{switch1:!1}},methods:{change:function(t){this.$Message.info("开关状态："+t)}}},a=s,r=e("2877"),u=Object(r["a"])(a,i,c,!1,null,null,null);n["default"]=u.exports}}]);
+//# sourceMappingURL=about.5c8baf96.js.map
