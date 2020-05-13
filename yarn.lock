@@ -1762,14 +1762,6 @@ babel-plugin-dynamic-import-node@^2.3.0, babel-plugin-dynamic-import-node@^2.3.3
   dependencies:
     object.assign "^4.1.0"
 
-babel-runtime@^6.0.0:
-  version "6.26.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
-  integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
-  dependencies:
-    core-js "^2.4.0"
-    regenerator-runtime "^0.11.0"
-
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
@@ -1816,13 +1808,6 @@ bcrypt-pbkdf@^1.0.0:
   integrity sha1-pDAdOJtqQ/m2f/PKEaP2Y342Dp4=
   dependencies:
     tweetnacl "^0.14.3"
-
-better-scroll@^1.15.2:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/better-scroll/-/better-scroll-1.15.2.tgz#65ffc6058b8b4ff337b8dfad4bcb334d7699ceb6"
-  integrity sha512-sSY2N8I9/B+YX/9JpIz6pMQYnmBuvspBqZG4UxYaQEfz/ZWrnxwdyKLL4t6IKpFmxqtZadVypXw7vSSHxBZpBQ==
-  dependencies:
-    babel-runtime "^6.0.0"
 
 bfj@^6.1.1:
   version "6.1.2"
@@ -2666,11 +2651,6 @@ core-js-compat@^3.6.2, core-js-compat@^3.6.4:
   dependencies:
     browserslist "^4.8.5"
     semver "7.0.0"
-
-core-js@^2.4.0:
-  version "2.6.11"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
-  integrity sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg==
 
 core-js@^3.6.4:
   version "3.6.5"
@@ -7167,11 +7147,6 @@ regenerate@^1.4.0:
   resolved "https://registry.npm.taobao.org/regenerate/download/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha1-SoVuxLVuQHfFV1icroXnpMiGmhE=
 
-regenerator-runtime@^0.11.0:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
-  integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
-
 regenerator-runtime@^0.13.4:
   version "0.13.5"
   resolved "https://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.13.5.tgz?cache=0&sync_timestamp=1584052392667&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fregenerator-runtime%2Fdownload%2Fregenerator-runtime-0.13.5.tgz#d878a1d094b4306d10b9096484b33ebd55e26697"
@@ -8500,11 +8475,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.npm.taobao.org/typedarray/download/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-typescript@^3.8.3:
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
-  integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
 
 uglify-js@3.4.x:
   version "3.4.10"
