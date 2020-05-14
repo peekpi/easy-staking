@@ -142,6 +142,8 @@ export default new Vuex.Store({
   },
   actions: {
     async getValidators(context) {
+      if(context.state.totalActive && context.state.totalActive == context.state.validators.length)
+        return 0;
       let commit = context.commit;
       let data = await fetchValidatorsWithParams(page, 20);
       commit("setLoaded", true);
@@ -152,6 +154,7 @@ export default new Vuex.Store({
         commit("setTotalActive", data.total_active);
         commit("setTotalFound", data.totalFound);
       }
+      return data.validators.length;
     },
     async updateDelegations(context) {
       let data = await fetchDelegationsByAddress(context.state.account.address);

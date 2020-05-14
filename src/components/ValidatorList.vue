@@ -14,10 +14,10 @@
                         <template slot="description">
                             <span>
                                 票数:
-                                <b>{{ description(item) }}</b>
+                                <b>{{ item.total_stake | ones | zeroDecimals }}</b>
                                 <span></span>
                                 年化:
-                                <b>{{ expectedRetrun(item) }}%</b>
+                                <b>{{ item.apr | percent }}%</b>
                             </span>
                         </template>
                     </ListItemMeta>
@@ -34,6 +34,8 @@ import ValidatorPage from "@/components/ValidatorPage";
 
 import Avatar from "@/components/common/Avatar";
 import StakingConfirm from "@/components/StakingConfirm";
+
+import { percent, ones, zeroDecimals } from "../js/num";
 
 //let run =false;
 export default {
@@ -62,17 +64,24 @@ export default {
         };
     },
     computed: {
-        scrollHeight(){return document.documentElement.clientHeight-85},
+        scrollHeight() {
+            return document.documentElement.clientHeight - 85;
+        },
         validators() {
             return this.$store.state.validators;
         }
+    },
+    filters: {
+        ones,
+        zeroDecimals,
+        percent
     },
     methods: {
         message(type, content) {
             this.$Message[type]({
                 background: true,
                 content,
-                duration: 3
+                duration: 5
             });
         },
         shortName(name) {
@@ -80,12 +89,6 @@ export default {
                 return name.slice(0, 10) + "..." + name.slice(-10);
             }
             return name;
-        },
-        description(item) {
-            return Math.floor(item.total_stake / 1e18).toString();
-        },
-        expectedRetrun(item) {
-            return (item.apr * 10).toFixed(2);
         },
         async validatorClick(item) {
             this.loging = true;
@@ -105,7 +108,9 @@ export default {
         async handleReachBottom() {
             this.loading = true;
             try {
-                await this.$store.dispatch("getValidators");
+                let amount = await this.$store.dispatch("getValidators");
+                if(amount == 0)
+                    this.message("info", "没有节点了");
             } catch (e) {
                 this.message("error", e);
             }

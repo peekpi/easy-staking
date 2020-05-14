@@ -24,13 +24,13 @@
                         <template slot="description">
                             <span>
                                 我的票数:
-                                <b>{{ toOneInt(item.amount) }}</b>
+                                <b>{{ item.amount | ones | twoDecimals }}</b>
                                 <span></span>
                                 我的收益:
-                                <b>{{ toOneInt(item.reward) }}</b>
+                                <b>{{ item.reward | ones | twoDecimals }}</b>
                                 <span></span>
                                 赎回中:
-                                <b>{{ totalLocked(item.Undelegations) }}</b>
+                                <b>{{ totalLocked(item.Undelegations) | ones | twoDecimals }}</b>
                             </span>
                         </template>
                     </ListItemMeta>
@@ -47,6 +47,8 @@ import ValidatorPage from "@/components/ValidatorPage";
 
 import Avatar from "@/components/common/Avatar";
 import StakingCancel from "@/components/StakingCancel";
+
+import { ones, twoDecimals } from "../js/num";
 
 //let run =false;
 export default {
@@ -80,12 +82,13 @@ export default {
             return this.$store.state.delegations;
         }
     },
+    filters:{ones, twoDecimals },
     methods: {
         message(type, content) {
             this.$Message[type]({
                 background: true,
                 content,
-                duration: 3
+                duration: 5
             });
         },
         shortName(name) {
@@ -94,18 +97,14 @@ export default {
             }
             return name;
         },
-        toOneInt(amount) {
-            return Math.floor(amount / 1e18).toString();
-        },
         totalLocked(undelegations) {
             let sum = 0;
             undelegations.map(x => {
                 sum += x.Amount ? x.Amount : 0;
             });
-            return Math.floor(sum / 1e18).toString();
+            return sum;
         },
         titleClick(item) {
-            console.log("titleClick")
             this.pageTriger = !this.pageTriger;
             this.validatorInfo = item.validator_info;
         },

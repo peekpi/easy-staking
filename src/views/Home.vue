@@ -17,7 +17,7 @@ export default {
       this.$Message[type]({
         background: true,
         content,
-        duration: 3
+        duration: 5
       });
     },
     click(){

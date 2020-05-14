@@ -19,7 +19,7 @@
                 <span slot="append">ONE</span>
             </Input>
             <span style="font-size:smaller">
-                可用余额: {{ parseFloat(balanceOne).toFixed(2) }}
+                可用余额: {{ balanceOne | twoDecimals }}
                 <b>ONE</b>
             </span>
             <Slider v-model="persent" :step="0.1" />
@@ -27,6 +27,7 @@
     </Modal>
 </template>
 <script>
+import { twoDecimals } from "../js/num";
 export default {
     data() {
         return {
@@ -35,12 +36,13 @@ export default {
         };
     },
     props: ["triger", "validator"],
+    filters:{ twoDecimals } ,
     methods: {
         message(type, content) {
             this.$Message[type]({
                 background: true,
                 content,
-                duration: 30
+                duration: 5
             });
         },
         async ok() {

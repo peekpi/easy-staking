@@ -20,7 +20,7 @@
                 <span slot="append">ONE</span>
             </Input>
             <span style="font-size:smaller">
-                我的投票: {{ parseFloat(balanceOne).toFixed(2) }}
+                我的投票: {{ balanceOne | twoDecimals }}
                 <b>ONE</b>
             </span>
             <Slider v-model="persent" :step="0.1" />
@@ -28,6 +28,7 @@
     </Modal>
 </template>
 <script>
+import { twoDecimals } from "../js/num";
 export default {
     data() {
         window.x = this;
@@ -37,12 +38,13 @@ export default {
         };
     },
     props: ["triger", "validator"],
+    filters: {twoDecimals},
     methods: {
         message(type, content) {
             this.$Message[type]({
                 background: true,
                 content,
-                duration: 3
+                duration: 5
             });
         },
         async ok() {

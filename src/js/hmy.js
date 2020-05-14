@@ -58,7 +58,7 @@ function delegate(from, to, amount) {
     validatorAddress: to,
     amount: new hmy.utils.Unit(amount).asWei().toHex()
   }).setTxParams({
-    gasPrice: "0x100000000000",
+    gasPrice: "0x1000000000000",
     gasLimit: "0x0927c0",
     chainId: hmy.chainId
   }).build();

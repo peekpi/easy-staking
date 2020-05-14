@@ -4,7 +4,7 @@
             <span>
                 地址:
                 <a @click="login">{{ address }}</a>
-                余额:{{ parseFloat(balanceOne).toFixed(2) }} ONE
+                余额:{{ balanceOne | twoDecimals }} ONE
             </span>
             <span  @click.prevent="clickRecord" class="record">
             <RadioGroup v-model="record" type="button" size="small">
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { twoDecimals } from "../js/num";
 export default {
     name: "Account",
     data: function() {
@@ -35,13 +36,13 @@ export default {
     methods: {
         clickRecord(){
             this.record = this.record=="true"?"":"true";
-            this.$emit('change', this.record=="true");
+            this.$emit('change', this.record!="true");
         },
         message(type, content) {
             this.$Message[type]({
                 background: true,
                 content,
-                duration: 3
+                duration: 5
             });
         },
         login: async function() {
@@ -55,7 +56,7 @@ export default {
             this.loging=false;
         }
     },
-    watch: {},
+    filters: { twoDecimals } ,
     computed: {
         address() {
             if (this.account.address == undefined) return "";
