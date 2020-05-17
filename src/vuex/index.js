@@ -12,10 +12,10 @@ Vue.use(Vuex);
 
 //https://staking-explorer2-268108.appspot.com/networks/harmony-partnernet/validators_with_page?active=false&page=0&search=&size=50&sortOrder=desc&sortProperty=total_stake
 //https://staking-explorer2-268108.appspot.com/networks/harmony-open-staking/validators_with_page?active=true&page=0&search=&size=20&sortOrder=desc&sortProperty=total_stake
-
+//https://staking-explorer2-268108.appspot.com/networks/harmony/validators_with_page?active=true&page=0&search=&size=50&sortOrder=desc&sortProperty=apr
 const API_URL="https://staking-explorer2-268108.appspot.com";
 //const API_URL = "http://staking.hmny.io";
-const networkId = "harmony-partnernet";
+const networkId = "harmony";
 
 function remapValidator(
   validator,
