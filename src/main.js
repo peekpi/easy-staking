@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+//import router from './router'
 import './plugins/iview.js'
 import store from "./vuex"
 import hmy from "./js/hmy.js"
@@ -14,7 +14,7 @@ window.hmy = hmy;
 
 new Vue({
   data: {hmy},
-  router,
+//  router,
   store,
   render: h => h(App),
 }).$mount('#app')

@@ -21,8 +21,6 @@
     "schema-utils": "^2.6.6",
     "view-design": "^4.0.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.6",
-    "vue-svgicon": "^3.2.6",
     "vuex": "^3.3.0"
   },
   "devDependencies": {
@@ -30,6 +28,7 @@
     "@vue/cli-plugin-eslint": "~4.3.0",
     "@vue/cli-service": "~4.3.0",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-import": "^1.13.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "vue-cli-plugin-iview": "~2.0.0",
