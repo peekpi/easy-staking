@@ -11,12 +11,8 @@
         <List border :loading="loading">
             <Scroll :height="scrollHeight">
                 <ListItem v-for="(item, index) in delegations" :key="index">
-                    {{ index }}
-                    <Avatar
-                        class="li-validator-image"
-                        :alt="item.validator_address"
-                        :address="item.validator_address"
-                    />
+                    {{ index }}                    
+                    <ValidatorLogo :address="item.validator_address"/>
                     <ListItemMeta
                         :title="shortName(item.validator_info.name)"
                         v-on:click.native="titleClick(item)"
@@ -44,8 +40,7 @@
 </template>
 <script>
 import ValidatorPage from "@/components/ValidatorPage";
-
-import Avatar from "@/components/common/Avatar";
+import ValidatorLogo from "@/components/ValidatorLogo";
 import StakingCancel from "@/components/StakingCancel";
 
 import { ones, twoDecimals } from "../js/num";
@@ -54,7 +49,7 @@ import { ones, twoDecimals } from "../js/num";
 export default {
     name: "ValidatorList",
     components: {
-        Avatar,
+        ValidatorLogo,
         StakingCancel,
         ValidatorPage
     },
@@ -129,13 +124,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss">
-.li-validator-image {
-    border-radius: 0.25rem;
-    height: 30px;
-    width: 30px;
-    border: 1px solid var(--bc-dim);
-    margin: 0px 10px;
-}
-</style>

@@ -6,7 +6,7 @@
             <Scroll :on-reach-bottom="handleReachBottom" :height="scrollHeight">
                 <ListItem v-for="(item, index) in validators" :key="index">
                     {{ index }}
-                    <Avatar class="li-validator-image" :alt="item.address" :address="item.address" />
+                    <ValidatorLogo :address="item.address"/>
                     <ListItemMeta
                         :title="shortName(item.name)"
                         v-on:click.native="titleClick(item)"
@@ -31,8 +31,7 @@
 </template>
 <script>
 import ValidatorPage from "@/components/ValidatorPage";
-
-import Avatar from "@/components/common/Avatar";
+import ValidatorLogo from "@/components/ValidatorLogo";
 import StakingConfirm from "@/components/StakingConfirm";
 
 import { percent, ones, zeroDecimals } from "../js/num";
@@ -41,7 +40,7 @@ import { percent, ones, zeroDecimals } from "../js/num";
 export default {
     name: "ValidatorList",
     components: {
-        Avatar,
+        ValidatorLogo,
         StakingConfirm,
         ValidatorPage
     },
@@ -109,8 +108,7 @@ export default {
             this.loading = true;
             try {
                 let amount = await this.$store.dispatch("getValidators");
-                if(amount == 0)
-                    this.message("info", "没有节点了");
+                if (amount == 0) this.message("info", "没有节点了");
             } catch (e) {
                 this.message("error", e);
             }
@@ -124,13 +122,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss">
-.li-validator-image {
-    border-radius: 0.25rem;
-    height: 30px;
-    width: 30px;
-    border: 1px solid var(--bc-dim);
-    margin: 0px 10px;
-}
-</style>
