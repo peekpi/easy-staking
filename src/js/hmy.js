@@ -67,6 +67,19 @@ function delegate(from, to, amount) {
   return tx;
 }
 
+function withdrawReward(from) {
+  let tx = hmy.stakings.collectRewards({
+    delegatorAddress: from
+  }).setTxParams({
+    gasPrice: "0x1000000000000",
+    gasLimit: "0x0927c0",
+    chainId: hmy.chainId
+  }).build();
+  tx.setFromAddress(from);
+  window.rtx = tx;
+  return tx;
+}
+
 function undelegate(from, to, amount) {
   let tx = hmy.stakings.undelegate({
     delegatorAddress: from,
@@ -116,6 +129,7 @@ export default {
   transfer,
   delegate,
   undelegate,
+  withdrawReward,
   txSignSend
 }
 
