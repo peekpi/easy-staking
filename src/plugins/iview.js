@@ -7,7 +7,6 @@ import { Button, Table, Scroll, Spin,
 
 Vue.component('Button', Button);
 Vue.component('Table', Table);
-Vue.component('Message', Message);
 Vue.component('Scroll', Scroll);
 Vue.component('RadioGroup', RadioGroup);
 Vue.component('Radio', Radio);
@@ -23,6 +22,7 @@ Vue.component('Icon', Icon);
 Vue.component('Spin', Spin);
 Vue.component('Input', Input);
 
+Vue.prototype.$Message = Message
 //Vue.use(ViewUI)
 
 import 'view-design/dist/styles/iview.css'

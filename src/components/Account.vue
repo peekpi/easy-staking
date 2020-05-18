@@ -39,6 +39,7 @@ export default {
             this.$emit('change', this.record!="true");
         },
         message(type, content) {
+            window.x=this;
             this.$Message[type]({
                 background: true,
                 content,
