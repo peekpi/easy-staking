@@ -1,12 +1,12 @@
-1. Harmony log
-2. Validator log
-3. Balance deal
-4. Url deal
-5. Background color for delegate and undelegate
-6. Txs track and account update
+1. Harmony log              OK
+2. Validator log            OK
+3. Balance deal             OK
+4. Url deal                 OK
+5. Background color for delegate and undelegate OK
+6. Txs track and account update OK
 7. Node search
 8. Node info to Top
-9. Size auto adapt
+9. Size auto adapt  OK
 10. Bact to top
 11. Force update(draw down?)
 12. Logout?
