@@ -8,7 +8,7 @@
             :triger="pageTriger"
             :validator="validatorInfo"
         />
-        <List border :loading="loading">
+        <List border :loading="loading" class="dl">
             <Scroll :height="scrollHeight">
                 <ListItem v-for="(item, index) in delegations" :key="index">
                     {{ index }}                    
@@ -124,3 +124,9 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.dl {
+    background: #e8eaec;
+}
+</style>>

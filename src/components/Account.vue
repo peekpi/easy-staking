@@ -8,7 +8,7 @@
             </span>
             <span  @click.prevent="clickRecord" class="record">
             <RadioGroup v-model="record" type="button" size="small">
-                <Radio label="true">我的记录</Radio>
+                <Radio label="true" :style='record=="true"?"background: #dcdee2":""'>我的记录</Radio>
             </RadioGroup>
             </span>
         </div>
@@ -87,6 +87,10 @@ export default {
 .record {
     float:right;
 }
+/*
+.ivu-radio-group-button .ivu-radio-wrapper {
+    background: red;
+}*/
 a {
     color: #42b983;
 }
