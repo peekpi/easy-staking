@@ -38,21 +38,13 @@ export default {
             this.record = this.record=="true"?"":"true";
             this.$emit('change', this.record!="true");
         },
-        message(type, content) {
-            window.x=this;
-            this.$Message[type]({
-                background: true,
-                content,
-                duration: 5
-            });
-        },
         login: async function() {
             this.loging=true;
             try {
                 await this.$store.dispatch("logout");
                 await this.$store.dispatch("login");
             } catch (err) {
-                this.message("error", err.message);
+                this.$root.message("error", err.message);
             }
             this.loging=false;
         }

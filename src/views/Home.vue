@@ -13,15 +13,8 @@ import HelloWorld from '@/components/HelloWorld.vue'
 export default {
   name: 'Home',
   methods:{
-    message(type, content) {
-      this.$Message[type]({
-        background: true,
-        content,
-        duration: 5
-      });
-    },
     click(){
-      this.message("error",'<HelloWorld msg="HI"/>');
+      this.$root.message("error",'<HelloWorld msg="HI"/>');
     }
   },
   components: {

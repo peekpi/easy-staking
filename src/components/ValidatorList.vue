@@ -52,7 +52,7 @@ export default {
                 .then(() => (this.loading = false))
                 .catch(e => {
                     this.loading = false;
-                    this.message("error", e);
+                    this.$root.message("error", e);
                 });
         return {
             loading: this.$store.state.validators.length == 0,
@@ -76,13 +76,6 @@ export default {
         percent
     },
     methods: {
-        message(type, content) {
-            this.$Message[type]({
-                background: true,
-                content,
-                duration: 5
-            });
-        },
         shortName(name) {
             if (name.length > 25) {
                 return name.slice(0, 10) + "..." + name.slice(-10);
@@ -96,7 +89,7 @@ export default {
                 this.btnTriger = !this.btnTriger;
                 this.validatorSelected = item;
             } catch (err) {
-                this.message("error", err.message);
+                this.$root.message("error", err.message);
             }
             this.loging = false;
         },
@@ -108,9 +101,9 @@ export default {
             this.loading = true;
             try {
                 let amount = await this.$store.dispatch("getValidators");
-                if (amount == 0) this.message("info", "没有节点了");
+                if (amount == 0) this.$root.message("info", "没有节点了");
             } catch (e) {
-                this.message("error", e);
+                this.$root.message("error", e);
             }
             this.loading = false;
             //return new Promise(resolve => resolve());

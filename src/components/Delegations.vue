@@ -61,7 +61,7 @@ export default {
             .then(() => (this.loading = false))
             .catch(e => {
                 this.loading = false;
-                this.message("error", e);
+                this.$root.message("error", e);
             });
         return {
             loading: this.$store.state.delegations.length == 0,
@@ -79,13 +79,6 @@ export default {
     },
     filters:{ones, twoDecimals },
     methods: {
-        message(type, content) {
-            this.$Message[type]({
-                background: true,
-                content,
-                duration: 5
-            });
-        },
         shortName(name) {
             if (name.length > 25) {
                 return name.slice(0, 10) + "..." + name.slice(-10);
@@ -106,20 +99,6 @@ export default {
         async validatorClick(item) {
             this.btnTriger = !this.btnTriger;
             this.validatorSelected = item;
-        },
-        async handleReachBottom() {
-            this.loading = true;
-            try {
-                await this.$store.dispatch("updateDelegations");
-            } catch (e) {
-                this.message("error", e);
-            }
-            this.loading = false;
-            //return new Promise(resolve => resolve());
-            //if(run) return null;
-            //return new Promise(resolve => {
-            //  this.$store.dispatch("getValidators").then(()=>{resolve();run=false;});
-            //});
         }
     }
 };

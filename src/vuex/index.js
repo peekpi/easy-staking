@@ -13,7 +13,7 @@ Vue.use(Vuex);
 //https://staking-explorer2-268108.appspot.com/networks/harmony-partnernet/validators_with_page?active=false&page=0&search=&size=50&sortOrder=desc&sortProperty=total_stake
 //https://staking-explorer2-268108.appspot.com/networks/harmony-open-staking/validators_with_page?active=true&page=0&search=&size=20&sortOrder=desc&sortProperty=total_stake
 //https://staking-explorer2-268108.appspot.com/networks/harmony/validators_with_page?active=true&page=0&search=&size=50&sortOrder=desc&sortProperty=apr
-const API_URL="https://staking-explorer2-268108.appspot.com";
+const API_URL = "https://staking-explorer2-268108.appspot.com";
 //const API_URL = "http://staking.hmny.io";
 const networkId = "harmony";
 
@@ -68,7 +68,7 @@ function fetchDelegationsByAddress(address) {
   return axios
     .get(`${API_URL}/networks/${networkId}/delegations/${address}`)
     .then(rez => {
-      rez.data.map((v) =>{
+      rez.data.map((v) => {
         v.validator_info = remapValidator(v.validator_info, false);
       })
       return rez.data;
@@ -99,18 +99,26 @@ function fetchValidatorsWithParams(page = 0, size = 50) {
     })
 }
 
+async function updateBalance(account) {
+  if (account.address != undefined) {
+    let balance = await hmy.hmy.blockchain.getBalance(account);
+    account.balance = new hmy.hmy.utils.Unit(balance.result).asWei();
+  }
+  return account;
+}
+
 let page = 0;
 export default new Vuex.Store({
   state: {
     account: {},
-    delegations:[],
+    delegations: [],
     total: 0,
     totalActive: 0,
     totalFound: 0,
     validators: [],
     loading: false,
     loaded: false,
-    txRecord:[]
+    txRecord: []
   },
   mutations: {
     setAccount(state, account) {
@@ -138,13 +146,13 @@ export default new Vuex.Store({
     setDelegations(state, delegations) {
       state.delegations = delegations;
     },
-    appendTx(state, tx){
+    appendTx(state, tx) {
       state.txRecord.push(tx);
     }
   },
   actions: {
     async getValidators(context) {
-      if(context.state.totalActive && context.state.totalActive == context.state.validators.length)
+      if (context.state.totalActive && context.state.totalActive == context.state.validators.length)
         return 0;
       let commit = context.commit;
       let data = await fetchValidatorsWithParams(page, 20);
@@ -166,8 +174,7 @@ export default new Vuex.Store({
       window.vuex = this;
       if (context.state.account.address == undefined) {
         let account = await hmy.login();
-        let balance = await hmy.hmy.blockchain.getBalance(account);
-        account.balance = new hmy.hmy.utils.Unit(balance.result).asWei();
+        await updateBalance(account);
         context.commit("setAccount", account);
       }
     },
@@ -177,10 +184,15 @@ export default new Vuex.Store({
         context.commit("setAccount", {});
       }
     },
-    async txCommit(context, tx) {
+    async txCommit(context, { tx, fun }) {
       await hmy.txSignSend(tx);
-      //await sentTxn.confirm(tx.id, 5);
       context.commit("appendTx", tx);
+      tx.confirm(tx.id, 5).then(
+        () => {
+          fun();
+          updateBalance(context.state.account).then(account => context.commit("setAccount", account));
+        }
+      ).catch(fun)
     }
   }
 })

@@ -4,11 +4,11 @@ const { ChainID, ChainType } = require('@harmony-js/utils');
 const stakingAPIs = require("./stakingAPIs.json");
 
 const shardID = 0;
-const ostn = "https://api.s0.dry.hmny.io"
-//const ostn = "https://api.s0.t.hmny.io" // main
+//const main = "https://api.s0.dry.hmny.io" // ostn
+const main = "https://api.s0.t.hmny.io" // main
 const hmy = new Harmony(
   // rpc url
-  ostn,
+  main,
   {
     // chainType set to Harmony
     chainType: ChainType.Harmony,

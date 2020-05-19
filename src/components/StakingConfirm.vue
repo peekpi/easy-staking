@@ -28,6 +28,8 @@
 </template>
 <script>
 import { twoDecimals } from "../js/num";
+
+let txUrl = id=>`https://explorer.harmony.one/#/tx/${id}`
 export default {
     data() {
         return {
@@ -36,15 +38,8 @@ export default {
         };
     },
     props: ["triger", "validator"],
-    filters:{ twoDecimals } ,
+    filters: { twoDecimals },
     methods: {
-        message(type, content) {
-            this.$Message[type]({
-                background: true,
-                content,
-                duration: 5
-            });
-        },
         async ok() {
             try {
                 const hmy = this.$root.hmy;
@@ -57,10 +52,19 @@ export default {
                     this.validator.address,
                     amount
                 );
-                await this.$store.dispatch("txCommit", tx);
-                this.message("success", "交易哈希:" + tx.id);
+                let msgObj = null;
+                await this.$store.dispatch("txCommit", {
+                    tx,
+                    fun:() =>{
+                        msgObj && msgObj();
+                        if (tx.isConfirmed())
+                            this.$root.message("success", "<a target=_blank href="+txUrl(tx.id)+">交易</a>已打包");
+                        else this.$root.message("warning", "<a target=_blank href="+txUrl(tx.id)+">交易</a>仍未打包");
+                    }
+                });
+                msgObj = this.$root.message("loading", "<a target=_blank href="+txUrl(tx.id)+">交易</a>已发送，等待打包。");
             } catch (err) {
-                this.message("error", err.message ? err.message : err);
+                this.$root.message("error", err.message ? err.message : err);
             }
             this.enable = false;
         }

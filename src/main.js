@@ -13,8 +13,18 @@ Vue.config.productionTip = false
 window.hmy = hmy;
 
 new Vue({
-  data: {hmy},
-//  router,
+  data: { hmy },
+  //  router,
+  methods: {
+    message(type, content) { // pop iview message
+      this.$Message[type]({
+        background: true,
+        content,
+        closable: true,
+        duration: 5
+      });
+    },
+  },
   store,
   render: h => h(App),
 }).$mount('#app')
