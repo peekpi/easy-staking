@@ -73,7 +73,7 @@ export default {
 <style scoped>
 .margin {
     margin-left: 1em;
-    height: 1.5em;
+    height: 1.59em;
     overflow:hidden;
     font-size: 1.1em;
 }
