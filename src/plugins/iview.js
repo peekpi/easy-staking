@@ -25,4 +25,4 @@ Vue.component('Input', Input);
 Vue.prototype.$Message = Message
 //Vue.use(ViewUI)
 
-import 'view-design/dist/styles/iview.css'
+//import 'view-design/dist/styles/iview.css'
