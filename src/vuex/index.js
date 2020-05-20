@@ -82,7 +82,8 @@ function fetchValidatorsWithParams(page = 0, size = 50) {
     search: "",
     size,
     sortOrder: "desc",
-    sortProperty: "total_stake",
+    sortProperty: "apr",
+    //sortProperty: "total_stake",
   };
   return axios
     .get(
