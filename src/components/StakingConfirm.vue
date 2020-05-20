@@ -49,7 +49,7 @@ export default {
             try {
                 if(this.amount < 1000)
                     throw {message:"至少需要 1000 One"}
-                if(this.balanceOne - this.amount < 1)
+                if(this.balanceOne - this.amount < 0.001)
                     throw {message:"请留出一些手续费"}
                 const hmy = this.$root.hmy;
                 let account = this.account;
