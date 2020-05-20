@@ -17,7 +17,7 @@
                                 <b>{{ item.total_stake | ones | zeroDecimals }}</b>
                                 <span></span>
                                 年化:
-                                <b>{{ item.apr | percent }}%</b>
+                                <b>{{ (item.apr>item.rate?item.apr-item.rate:0) | percent }}%</b>
                             </span>
                         </template>
                     </ListItemMeta>
