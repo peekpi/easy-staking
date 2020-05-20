@@ -5,7 +5,6 @@
         :loading="true"
         :closable="false"
         :mask-closable="false"
-        @on-ok="ok"
     >
         <p slot="header" style="color:#f60;text-align:center">
             <span>
@@ -24,6 +23,10 @@
             </span>
             <Slider v-model="persent" :step="0.1" />
         </div>
+        <div slot="footer">
+            <Button type="text" @click="enable=false">取消</Button>
+            <Button type="primary" :loading="loading" @click="ok">确定</Button>
+        </div>
     </Modal>
 </template>
 <script>
@@ -34,14 +37,20 @@ export default {
     data() {
         return {
             enable: false,
-            amount: 1000
+            amount: 1000,
+            loading: false
         };
     },
     props: ["triger", "validator"],
     filters: { twoDecimals },
     methods: {
         async ok() {
+            this.loading = true;
             try {
+                if(this.amount < 1000)
+                    throw {message:"至少需要 1000 One"}
+                if(this.balanceOne - this.amount < 1)
+                    throw {message:"请留出一些手续费"}
                 const hmy = this.$root.hmy;
                 let account = this.account;
                 let amount = new hmy.hmy.utils.Unit(this.amount)
@@ -63,10 +72,11 @@ export default {
                     }
                 });
                 msgObj = this.$root.message("loading", "<a target=_blank href="+txUrl(tx.id)+">交易</a>已发送，等待打包。");
+                this.enable = false;
             } catch (err) {
                 this.$root.message("error", err.message ? err.message : err);
             }
-            this.enable = false;
+            this.loading = false;
         }
     },
     watch: {
