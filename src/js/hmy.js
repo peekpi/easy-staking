@@ -3,6 +3,8 @@ const { Harmony } = require('@harmony-js/core');
 const { ChainID, ChainType } = require('@harmony-js/utils');
 const stakingAPIs = require("./stakingAPIs.json");
 
+const GAS_PRICE = "1000000000"; // 1Gwei
+
 const shardID = 0;
 //const main = "https://api.s0.dry.hmny.io" // ostn
 const main = "https://api.s0.t.hmny.io" // main
@@ -58,7 +60,7 @@ function delegate(from, to, amount) {
     validatorAddress: to,
     amount: new hmy.utils.Unit(amount).asWei().toHex()
   }).setTxParams({
-    gasPrice: "0x1000000000000",
+    gasPrice: GAS_PRICE,
     gasLimit: "0x0927c0",
     chainId: hmy.chainId
   }).build();
@@ -71,7 +73,7 @@ function withdrawReward(from) {
   let tx = hmy.stakings.collectRewards({
     delegatorAddress: from
   }).setTxParams({
-    gasPrice: "0x1000000000000",
+    gasPrice: GAS_PRICE,
     gasLimit: "0x0927c0",
     chainId: hmy.chainId
   }).build();
@@ -86,7 +88,7 @@ function undelegate(from, to, amount) {
     validatorAddress: to,
     amount: new hmy.utils.Unit(amount).asWei().toHex()
   }).setTxParams({
-    gasPrice: "0x100000000000",
+    gasPrice: GAS_PRICE,
     gasLimit: "0x0927c0",
     chainId: hmy.chainId
   }).build();
@@ -109,7 +111,7 @@ function transfer(from, to, amount) {
     // send token to toShardID
     toShardID: 0,
     // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-    gasPrice: "100000000000",
+    gasPrice: GAS_PRICE,
   });
   window.tx = tx;
   return tx;
