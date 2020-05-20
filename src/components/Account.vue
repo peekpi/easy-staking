@@ -8,12 +8,12 @@
             </span>
             <span  @click.prevent="clickRecord" class="record">
             <RadioGroup v-model="record" type="button" size="small">
-                <Radio label="true" :style='record=="true"?"background: #dcdee2":""'>我的记录</Radio>
+                <Radio label="true" :style='record=="true"?"background: #dcdee2":""'>{{ record=="true"?"返回":"我的记录" }}</Radio>
             </RadioGroup>
             </span>
         </div>
         <div v-else>
-            <Button type="text" size="small" @click="login" :loading="loging">登录</Button>
+            <Button type="text" size="small" @click="login" :loading="loging"><span style="font-size: 1.2em">登录</span></Button>
         </div>
     </div>
 </template>
@@ -75,6 +75,7 @@ export default {
     margin-left: 1em;
     height: 1.5em;
     overflow:hidden;
+    font-size: 1.1em;
 }
 .record {
     float:right;
