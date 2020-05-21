@@ -3,8 +3,6 @@ const { Harmony } = require('@harmony-js/core');
 const { ChainID, ChainType } = require('@harmony-js/utils');
 const stakingAPIs = require("./stakingAPIs.json");
 
-const GAS_PRICE = "1000000000"; // 1Gwei
-
 const shardID = 0;
 //const main = "https://api.s0.dry.hmny.io" // ostn
 const main = "https://api.s0.t.hmny.io" // main
@@ -19,6 +17,8 @@ const hmy = new Harmony(
     shardID,
   }
 );
+
+const GAS_PRICE = (new hmy.utils.Unit(1)).asGwei().toHex(); // 1Gwei
 
 stakingAPIs.map(mod=>{
   let modname = mod.name.split(" ")[0];

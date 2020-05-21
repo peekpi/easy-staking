@@ -3,8 +3,11 @@ import Vue from 'vue'
 import { Button, Table, Scroll, Spin,
     RadioGroup,Radio,List,Message,
     Slider,Modal,Layout,Content,Header,Icon,Input
+    ,Card
 } from 'view-design';
 
+
+Vue.component('Card', Card);
 Vue.component('Button', Button);
 Vue.component('Table', Table);
 Vue.component('Scroll', Scroll);
@@ -23,6 +26,10 @@ Vue.component('Spin', Spin);
 Vue.component('Input', Input);
 
 Vue.prototype.$Message = Message
-//Vue.use(ViewUI)
+
+/*
+import ViewUI from 'view-design'
+Vue.use(ViewUI)
+*/
 
 //import 'view-design/dist/styles/iview.css'

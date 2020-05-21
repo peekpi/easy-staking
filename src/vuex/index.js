@@ -114,6 +114,7 @@ export default new Vuex.Store({
   state: {
     account: {},
     delegations: [],
+    totalRewards: 0,
     total: 0,
     totalActive: 0,
     totalFound: 0,
@@ -146,6 +147,9 @@ export default new Vuex.Store({
       state.loaded = loaded;
     },
     setDelegations(state, delegations) {
+      let sum = 0;
+      delegations.map(x=>sum += x.reward);
+      state.totalRewards = sum;
       state.delegations = delegations;
     },
     appendTx(state, tx) {
