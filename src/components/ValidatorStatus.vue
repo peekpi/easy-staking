@@ -49,7 +49,7 @@ export default {
                     text: this.validator["elected_nodes"]
                 },
                 {
-                    name: "七日年化",
+                    name: "年化",
                     text: percent(this.validator["apr"])
                 },
                 {
