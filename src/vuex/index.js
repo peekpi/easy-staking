@@ -177,7 +177,6 @@ export default new Vuex.Store({
       context.commit("setDelegations", data);
     },
     async login(context) {
-      window.vuex = this;
       if (context.state.account.address == undefined) {
         let account = await hmy.login();
         await updateBalance(account);

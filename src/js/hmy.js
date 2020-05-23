@@ -47,6 +47,7 @@ async function walletInit() {
 async function login() {
   await walletInit();
   return window.harmony.getAccount();
+  //return {address:"one16xh2u9r4677egx4x3s0u966ave90l37hh7wq72"}
 }
 
 async function logout() {
