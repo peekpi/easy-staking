@@ -1,9 +1,9 @@
 import Vue from 'vue'
 
-import { Button, Table, Scroll, Spin,
+import { 
+    Button, Table, Scroll, Spin ,Card,
     RadioGroup,Radio,List,Message,
-    Slider,Modal,Layout,Content,Header,Icon,Input
-    ,Card
+    Slider,Modal,Layout,Content,Header,Input
 } from 'view-design';
 
 
@@ -21,7 +21,6 @@ Vue.component('Modal', Modal);
 Vue.component('Layout', Layout);
 Vue.component('Header', Header);
 Vue.component('Content', Content);
-Vue.component('Icon', Icon);
 Vue.component('Spin', Spin);
 Vue.component('Input', Input);
 
