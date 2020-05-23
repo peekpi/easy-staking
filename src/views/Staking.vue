@@ -19,8 +19,8 @@
         </Header>
         <Content>
             <Account v-model="delegate" />
-            <ValidatorList v-if="delegate" />
-            <Delegations v-else />
+            <ValidatorList v-show="delegate" />
+            <Delegations v-if="!delegate" />
         </Content>
     </Layout>
 </template>
@@ -63,6 +63,8 @@ export default {
 }
 .ivu-layout-header {
     padding: 0 0 0 1em;
+    overflow: hidden;
+
 }
 .topright {
     float: right;
