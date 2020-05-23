@@ -3,8 +3,8 @@
         <div v-if="account.address">
             <span>
                 地址:
-                <a @click="login">{{ address }}</a>
-                余额:{{ balanceOne | twoDecimals }} ONE
+                <a @click="login" :title="account.address" >{{ address }}</a>
+                余额:<span :title="account.balance.wei.toString()">{{ balanceOne | twoDecimals }}</span> ONE
             </span>
             <span  @click.prevent="clickRecord" class="record">
             <RadioGroup v-model="record" type="button" size="small">
@@ -56,7 +56,7 @@ export default {
             return (
                 this.account.address.slice(0, 6) +
                 "..." +
-                this.account.address.slice(-4, -1)
+                this.account.address.substr(-4)
             );
         },
         balanceOne() {
