@@ -110,6 +110,7 @@ async function updateBalance(account) {
 }
 
 let page = 0;
+let needUpdate = true;
 export default new Vuex.Store({
   state: {
     account: {},
@@ -173,6 +174,8 @@ export default new Vuex.Store({
       return data.validators.length;
     },
     async updateDelegations(context) {
+      if(!needUpdate) return
+      needUpdate = false;
       let data = await fetchDelegationsByAddress(context.state.account.address);
       context.commit("setDelegations", data);
     },
@@ -196,6 +199,8 @@ export default new Vuex.Store({
         () => {
           fun();
           updateBalance(context.state.account).then(account => context.commit("setAccount", account));
+          needUpdate = true;
+          context.dispatch("updateDelegations");
         }
       ).catch(fun)
     }
