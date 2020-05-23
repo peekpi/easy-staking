@@ -16,14 +16,14 @@
         </p>
         <div>
             <Input v-model="amount" placeholder="数量">
-                <Icon type="logo-bitcoin" slot="prepend" />
+                <img src="../img/icon.jpg" class="icon" slot="prepend"/>
                 <span slot="append">ONE</span>
             </Input>
             <span style="font-size:smaller">
                 我的投票: {{ balanceOne | twoDecimals }}
                 <b>ONE</b>
             </span>
-            <Slider v-model="persent" :step="0.1" />
+            <Slider v-model="persent" :tip-format="x=>x+'%'" :step="0.1" />
         </div>
     </Modal>
 </template>
