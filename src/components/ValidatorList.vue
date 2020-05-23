@@ -5,7 +5,7 @@
         <List border :loading="loading">
             <Scroll :on-reach-bottom="handleReachBottom" :height="scrollHeight">
                 <ListItem v-for="(item, index) in validators" :key="index">
-                    {{ index }}
+                    {{ index+1 }}
                     <ValidatorLogo :address="item.address"/>
                     <ListItemMeta
                         :title="shortName(item.name)"

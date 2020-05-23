@@ -2,7 +2,7 @@
     <div class="dl">
         <StakingCancel :triger="btnTriger" :validator="validatorSelected" />
         <ValidatorPage :triger="pageTriger" :validator="validatorInfo" />
-        <List :loading="loading">
+        <List border :loading="loading">
             <Scroll :height="scrollHeight">
                 <card style="margin: 0 1em">
                     <div>
@@ -13,8 +13,8 @@
                         </span>
                     </div>
                 </card>
-                <ListItem v-for="(item, index) in delegations" :key="index">
-                    {{ index }}
+                <ListItem v-for="(item, index) in validDelegations" :key="index">
+                    {{ index+1 }}
                     <ValidatorLogo :address="item.validator_address" />
                     <ListItemMeta
                         :title="shortName(item.validator_info.name)"
@@ -34,7 +34,7 @@
                         </template>
                     </ListItemMeta>
                     <template slot="action">
-                        <Button shape="circle" @click="validatorClick(item)">取回投票</Button>
+                        <Button shape="circle" :disabled="item.amount==0" @click="validatorClick(item)">取回投票</Button>
                     </template>
                 </ListItem>
             </Scroll>
@@ -77,6 +77,9 @@ export default {
         };
     },
     computed: {
+        validDelegations(){
+            return this.delegations.filter(x=>(x.amount+x.reward+this.totalLocked(x.Undelegations)>0))
+        },
         scrollHeight() {
             return document.documentElement.clientHeight - 85;
         },
@@ -114,6 +117,9 @@ export default {
 <style scoped>
 .dl {
     background: #e8eaec;
+}
+.ivu-list-bordered .ivu-list-item {
+    border-bottom-color:#dcdee2;
 }
 .margin {
     padding: 0 1em;
