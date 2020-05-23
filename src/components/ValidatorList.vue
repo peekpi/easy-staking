@@ -77,9 +77,9 @@ export default {
     },
     methods: {
         shortName(name) {
-            if (name.length > 25) {
-                return name.slice(0, 10) + "..." + name.slice(-10);
-            }
+            //if (name.length > 25) {
+            //    return name.slice(0, 10) + "..." + name.slice(-10);
+            //}
             return name;
         },
         async validatorClick(item) {
