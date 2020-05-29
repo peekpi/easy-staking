@@ -1,12 +1,16 @@
 import Vue from 'vue'
 
 import { 
-    Button, Table, Scroll, Spin ,Card,
-    RadioGroup,Radio,List,Message,
-    Slider,Modal,Layout,Content,Header,Input
+    Button, Table, Scroll, Spin ,Card,Switch,
+    RadioGroup,Radio,List,Message,CellGroup,Cell,
+    Slider,Modal,Layout,Content,Header,Input,AutoComplete
 } from 'view-design';
 
 
+Vue.component('i-switch', Switch);
+Vue.component('CellGroup', CellGroup);
+Vue.component('Cell', Cell);
+Vue.component('AutoComplete', AutoComplete);
 Vue.component('Card', Card);
 Vue.component('Button', Button);
 Vue.component('Table', Table);

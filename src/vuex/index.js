@@ -76,14 +76,14 @@ function fetchDelegationsByAddress(address) {
     })
 }
 
-function fetchValidatorsWithParams(page = 0, size = 50) {
+function fetchValidatorsWithParams(page = 0, size = 50, sortProperty="apr", active=true, search="") {
   const params = {
-    active: true,
+    active,
     page,
-    search: "",
+    search,
     size,
     sortOrder: "desc",
-    sortProperty: "apr",
+    sortProperty,
     //sortProperty: "total_stake",
   };
   return axios
@@ -122,11 +122,20 @@ export default new Vuex.Store({
     validators: [],
     loading: false,
     loaded: false,
-    txRecord: []
+    txRecord: [],
+    reqConfig: {
+      active: true,
+      search: "",
+      sortProperty: "apr"
+    }
   },
   mutations: {
     setAccount(state, account) {
       state.account = account;
+    },
+    clearValidators(state) {
+      page=0;
+      state.validators = [];
     },
     appendValidators(state, validators) {
       state.validators = state.validators.concat(validators);
@@ -155,6 +164,15 @@ export default new Vuex.Store({
     },
     appendTx(state, tx) {
       state.txRecord.push(tx);
+    },
+    changeConfig(state, {active, search, sortProperty}) {
+      let oldCfg = state.reqConfig;
+      let cfg = {
+        active: active == undefined ? oldCfg.active : active,
+        search: search == undefined ? oldCfg.search : search,
+        sortProperty: sortProperty == undefined ? oldCfg.sortProperty : sortProperty
+      }
+      state.reqConfig = cfg;
     }
   },
   actions: {
@@ -162,7 +180,8 @@ export default new Vuex.Store({
       if (context.state.totalActive && context.state.totalActive == context.state.validators.length)
         return 0;
       let commit = context.commit;
-      let data = await fetchValidatorsWithParams(page, 20);
+      let cfg =  context.state.reqConfig;
+      let data = await fetchValidatorsWithParams(page, 20, cfg.sortProperty, cfg.active, cfg.search);
       commit("setLoaded", true);
       if (data.validators.length) {
         page++;

@@ -3,6 +3,7 @@
         <ValidatorPage :triger="pageTriger" :validator="validatorSelected" />
         <StakingConfirm :triger="btnTriger" :validator="validatorSelected" />
         <List border :loading="loading">
+            <SearchConfig v-model="loading"/>
             <Scroll :on-reach-bottom="handleReachBottom" :height="scrollHeight">
                 <ListItem v-for="(item, index) in validators" :key="index">
                     {{ index+1 }}
@@ -33,6 +34,7 @@
 import ValidatorPage from "@/components/ValidatorPage";
 import ValidatorLogo from "@/components/ValidatorLogo";
 import StakingConfirm from "@/components/StakingConfirm";
+import SearchConfig from "@/components/SearchConfig";
 
 import { percent, ones, zeroDecimals } from "../js/num";
 
@@ -42,7 +44,8 @@ export default {
     components: {
         ValidatorLogo,
         StakingConfirm,
-        ValidatorPage
+        ValidatorPage,
+        SearchConfig
     },
     data() {
         //this.$store.dispatch("login");
@@ -64,7 +67,7 @@ export default {
     },
     computed: {
         scrollHeight() {
-            return document.documentElement.clientHeight - 85;
+            return document.documentElement.clientHeight - 108;
         },
         validators() {
             return this.$store.state.validators;
