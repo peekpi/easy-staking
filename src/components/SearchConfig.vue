@@ -7,7 +7,7 @@
         clearable
         placeholder="节点名、节点地址、高级选项"
     >
-        <Option v-for="item in queryHistory" :value="item" :key="item" style="padding-left:1em">{{ item }}</Option>
+        <Option v-for="item in queryHistory" :value="item" :key="item">{{ item }}</Option>
         <CellGroup>
             <Cell title="排序方式" :disabled="loading" :selected="false">
                 <RadioGroup slot="extra" v-model="sortProperty">
