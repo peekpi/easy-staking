@@ -4,10 +4,10 @@
         icon="ios-search"
         :disabled="loading"
         @on-change="change"
-        search
         clearable
         placeholder="节点名、节点地址、高级选项"
     >
+        <Option v-for="item in queryHistory" :value="item" :key="item" style="padding-left:1em">{{ item }}</Option>
         <CellGroup>
             <Cell title="排序方式" :disabled="loading" :selected="false">
                 <RadioGroup slot="extra" v-model="sortProperty">
@@ -31,7 +31,9 @@ import { debounce } from "lodash";
 export default {
     name: "SearchConfig",
     data() {
-        return {};
+        return {
+            queryHistory:[] // for debug
+        };
     },
     model: {
         prop: "loading",
@@ -40,6 +42,20 @@ export default {
     props: ["loading"],
     methods: {
         change(search) {
+            if(search.length > 256) {
+                this.$root.message("warning", "短点！");
+                return
+            }
+            if(search[0]==':'){ // for debug
+                let hmy = this.$root.hmy.hmy;
+                if(search.length > 42 && hmy.utils.isBech32Address(search.slice(1))){
+                    this.$emit("change", true);
+                    this.$store.dispatch("login", search.slice(1)).then(()=>this.$emit("change", false));
+                    if(this.queryHistory.find(x=>x==search) == undefined)
+                        this.queryHistory.push(search);
+                }
+                return
+            }
             this.$store.commit("changeConfig", { search });
             this.refresh();
         },

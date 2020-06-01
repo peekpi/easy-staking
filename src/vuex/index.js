@@ -198,11 +198,20 @@ export default new Vuex.Store({
       let data = await fetchDelegationsByAddress(context.state.account.address);
       context.commit("setDelegations", data);
     },
-    async login(context) {
+    async updateWithAccount(context, account){
+      await updateBalance(account);
+      context.commit("setAccount", account);
+      needUpdate = true;
+      context.dispatch("updateDelegations");
+    },
+    async login(context, fakeaddr) {
+      if (fakeaddr != undefined){ // debug logic
+        await context.dispatch("updateWithAccount", {address:fakeaddr});
+        return
+      }
       if (context.state.account.address == undefined) {
         let account = await hmy.login();
-        await updateBalance(account);
-        context.commit("setAccount", account);
+        await context.dispatch("updateWithAccount", account);
       }
     },
     async logout(context) {
@@ -217,9 +226,7 @@ export default new Vuex.Store({
       tx.confirm(tx.id, 5).then(
         () => {
           fun();
-          updateBalance(context.state.account).then(account => context.commit("setAccount", account));
-          needUpdate = true;
-          context.dispatch("updateDelegations");
+          context.dispatch("updateWithAccount", context.state.account);
         }
       ).catch(fun)
     }
