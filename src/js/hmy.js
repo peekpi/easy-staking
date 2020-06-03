@@ -44,14 +44,18 @@ async function walletInit() {
   if(!window.harmony) throw({message:"请安装麦子钱包"});
 }
 
+let address = null;
 async function login() {
   await walletInit();
-  return window.harmony.getAccount();
+  let account = await window.harmony.getAccount();
+  address = account.address;
+  return account;
   //return {address:"one16xh2u9r4677egx4x3s0u966ave90l37hh7wq72"}
 }
 
 async function logout() {
   await walletInit();
+  address = null;
   return window.harmony.forgetIdentity();
 }
 
@@ -118,8 +122,9 @@ function transfer(from, to, amount) {
   return tx;
 }
 
-function contract(abi, address, options){
-  let contract = hmy.contracts.createContract(abi, address, options);
+function contract(abi, to, options={from:hmy.crypto.fromBech32(address), gas:'210000', gasPrice:GAS_PRICE}){
+  let contract = hmy.contracts.createContract(abi, to, options);
+  contract.wallet.signTransaction = window.harmony.signTransaction;
   let decodeParameters = (abi,hexdata)=>{
     if(0 == abi.length)
       return [];
