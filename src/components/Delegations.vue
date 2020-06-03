@@ -6,7 +6,7 @@
             <Scroll :height="scrollHeight">
                 <card style="margin: 0 1em">
                     <div>
-                        <h3>总收益：</h3>
+                        <h3>当前收益：</h3>
                         <span style="margin-left: 4.5em">
                             {{ $store.state.totalRewards | ones | twoDecimals }} ONE
                             <WithdrawRewards class="record" />

@@ -118,6 +118,44 @@ function transfer(from, to, amount) {
   return tx;
 }
 
+function contract(abi, address, options){
+  let contract = hmy.contracts.createContract(abi, address, options);
+  let decodeParameters = (abi,hexdata)=>{
+    if(0 == abi.length)
+      return [];
+    let params = contract.abiCoder.decodeParameters(abi,hexdata);
+    params.length = abi.length;
+    return params;
+  };
+  for(let name in contract.abiModel.getMethods()){
+    let method = contract.abiModel.getMethod(name);
+    method.decodeInputs = hexData=>decodeParameters(method.inputs, hexData);
+    method.decodeOutputs = hexData=>decodeParameters(method.outputs, hexData);
+  }
+
+  contract.decodeInput = (hexData)=>{
+    let no0x = hexData.startsWith('0x')?hexData.slice(2):hexData;
+    let sig = no0x.slice(0,8).toLowerCase();
+    let method = contract.abiModel.getMethod('0x'+sig);
+    if(!method) return false;
+    let obj = {
+      name: method.name,
+      params: method.decodeInputs('0x'+no0x.slice(8))
+    }
+    obj.toString = ()=>{
+      let str = obj.name + '(';
+      for(let i = 0; i < obj.params.length; i++){
+        if(i>0) str += ',';
+        str+=obj.params[i];
+      }
+      str+=')';
+      return str;
+    }
+    return obj;
+  }
+  return contract;
+}
+
 async function txSignSend(tx) {
   await window.harmony.signTransaction(tx);
   let ret = await tx.sendTransaction();
@@ -133,6 +171,7 @@ export default {
   delegate,
   undelegate,
   withdrawReward,
-  txSignSend
+  txSignSend,
+  contract
 }
 
