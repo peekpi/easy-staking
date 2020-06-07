@@ -17,11 +17,11 @@ new Vue({
   //  router,
   methods: {
     message(type, content) { // pop iview message
-      this.$Message[type]({
+      return this.$Message[type]({
         background: true,
         content,
         closable: true,
-        duration: 5
+        duration: type=='loading'?0:5
       });
     },
   },

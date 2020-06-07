@@ -1,5 +1,5 @@
 <template>
-    <Button shape="circle" size="small" :loading="loading" @click="click" ><span>取回</span></Button>
+    <Button shape="circle" size="small" :loading="loading" :disabled="$store.state.totalRewards == 0" @click="click" ><span>取回</span></Button>
 </template>
 <script>
 let txUrl = id=>`https://explorer.harmony.one/#/tx/${id}`
@@ -11,8 +11,8 @@ export default {
         async click(){
             this.loading = true;
             try {
-                if(this.$store.state.totalRewards == 0)
-                    throw {message:"无收益可提取"}
+                //if(this.$store.state.totalRewards == 0)
+                //    throw {message:"无收益可提取"}
                 const hmy = this.$root.hmy;
                 let account = this.$store.state.account;
                 let tx = hmy.withdrawReward(account.address);
