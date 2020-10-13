@@ -1,10 +1,13 @@
 <template>
     <Modal footer-hide v-model="enable" fullscreen :title="validator.name">
-        <ValidatorProfile :validator="validator" />
-        <br />
-        <ValidatorStatus :validator="validator" />
-        <br />
-        <ValidatorInfo :validator="validator" />
+        <Spin v-if="loading" size="large" fix />
+        <div v-else>
+            <ValidatorProfile :validator="detail" />
+            <br />
+            <ValidatorStatus :validator="detail" />
+            <br />
+            <ValidatorInfo :validator="detail" />
+        </div>
     </Modal>
 </template>
 <script>
@@ -15,13 +18,24 @@ import ValidatorStatus from "@/components/ValidatorStatus";
 export default {
     data() {
         return {
-            enable: false
+            enable: false,
+            loading: true,
+            detail: null,
         };
     },
     props: ["triger", "validator"],
     watch: {
         triger() {
-            if (!this.enable) this.enable = true;
+            if (!this.enable){
+                this.loading = true;
+                this.enable = true;
+                this.$store.dispatch("getValidator", this.validator.address).then(
+                    validator=>{
+                        this.detail = validator;
+                        this.loading = false;
+                    }
+                );
+            }
         }
     },
     components: {

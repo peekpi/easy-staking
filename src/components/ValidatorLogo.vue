@@ -1,7 +1,7 @@
 <template>
     <div>
         <img
-            v-if="imgState!='error'"
+            v-if="hasLogo && imgState!='error'"
             :src="imageSrc"
             class="li-validator-image"
             :style="{ display: imgState=='loaded' ? 'block' : 'none' }"
@@ -23,15 +23,12 @@ export default {
   components: {
     Avatar
   },
-  props: ["address", "logoUrl"],
-    computed: {
+  props: ["address", "hasLogo"],
+  computed: {
     imageSrc() {
-      return (
-        this.logoUrl ||
-        `https://github.com/harmony-one/validator-logos/raw/master/validators/${this.address}.jpg`
-      )
+      return `https://hmny-t.co/networks/mainnet/validators/${this.address}/avatar`
     }
-}
+  }
 };
 </script>
 

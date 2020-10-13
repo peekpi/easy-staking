@@ -5,6 +5,8 @@
             "hmy_getBalanceByBlockNumber",
             "hmy_getTransactionCount",
             "hmy_getBalance",
+            "hmy_getAccountNonce",
+            "hmy_setLogVerbosity",
             "address"
         ]
     },
@@ -42,6 +44,7 @@
             "hmy_getBlockByNumber",
             "hmy_getBlockByHash",
             "hmy_getBlocks",
+            "hmy_getCurrentStakingErrorSink",
             "tx"
         ]
     },

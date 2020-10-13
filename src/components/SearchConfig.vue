@@ -57,7 +57,7 @@ export default {
                 return
             }
             this.$store.commit("changeConfig", { search });
-            this.refresh();
+            this.$forceUpdate()();
         },
         refresh: debounce(
             async function() {
@@ -82,7 +82,7 @@ export default {
             },
             set(v) {
                 this.$store.commit("changeConfig", { sortProperty: v });
-                this.refresh();
+                this.$forceUpdate();
             }
         },
         active: {
@@ -91,7 +91,7 @@ export default {
             },
             set(v) {
                 this.$store.commit("changeConfig", { active: !v });
-                this.refresh();
+                this.$forceUpdate();
             }
         }
     }

@@ -5,9 +5,12 @@
         <List border :loading="loading">
             <SearchConfig v-model="loading"/>
             <Scroll :on-reach-bottom="handleReachBottom" :height="scrollHeight">
-                <ListItem v-for="(item, index) in validators" :key="index">
+                <ListItem v-for="(item, index) in validators" :key="item.address">
                     {{ index+1 }}
-                    <ValidatorLogo :address="item.address"/>
+                    <ValidatorLogo 
+                    :address="item.address"
+                    :hasLogo="item.hasLogo"
+                    />
                     <ListItemMeta
                         :title="shortName(item.name)"
                         v-on:click.native="titleClick(item)"
@@ -70,7 +73,7 @@ export default {
             return document.documentElement.clientHeight - 108;
         },
         validators() {
-            return this.$store.state.validators;
+            return this.$store.getters.validators;
         }
     },
     filters: {

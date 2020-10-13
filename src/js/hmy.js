@@ -5,6 +5,7 @@ const stakingAPIs = require("./stakingAPIs.json");
 
 const shardID = 0;
 //const main = "https://api.s0.dry.hmny.io" // ostn
+//const main = "https://api.s0.b.hmny.io" // test
 const main = "https://api.s0.t.hmny.io" // main
 const hmy = new Harmony(
   // rpc url
@@ -13,6 +14,7 @@ const hmy = new Harmony(
     // chainType set to Harmony
     chainType: ChainType.Harmony,
     // chainType set to HmyLocal
+    //chainId: ChainID.HmyTestnet,
     chainId: ChainID.HmyMainnet,
     shardID,
   }
@@ -20,28 +22,29 @@ const hmy = new Harmony(
 
 const GAS_PRICE = (new hmy.utils.Unit(1)).asGwei().toHex(); // 1Gwei
 
-stakingAPIs.map(mod=>{
+stakingAPIs.map(mod => {
   let modname = mod.name.split(" ")[0];
   let methodsObj = {};
-  mod.methods.map(method=>{
-    methodsObj[method.slice(4)] = function(){
+  mod.methods.map(method => {
+    let name = method.startsWith('hmy_') ? method.slice(4) : method;
+    methodsObj[name] = function () {
       return hmy.messenger.send(
         method,
         Array.from(arguments)
-      ).then(result=>result.getRaw);
+      ).then(result => result.getRaw);
     }
   });
   hmy.blockchain[modname] = methodsObj;
 });
 
-function sleep(ms){
+function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function walletInit() {
   let retry = 0;
-  while(!window.harmony && retry++ < 2) await sleep(1000);
-  if(!window.harmony) throw({message:"请安装麦子钱包"});
+  while (!window.harmony && retry++ < 2) await sleep(1000);
+  if (!window.harmony) throw ({ message: "请安装麦子钱包" });
 }
 
 let address = null;
@@ -102,7 +105,7 @@ function undelegate(from, to, amount) {
   return tx;
 }
 
-function transfer(from, to, amount) { 
+function transfer(from, to, amount) {
   let tx = hmy.transactions.newTx({
     from,
     //  token send to
@@ -122,38 +125,38 @@ function transfer(from, to, amount) {
   return tx;
 }
 
-function contract(abi, to, options={from:hmy.crypto.fromBech32(address), gas:'210000', gasPrice:GAS_PRICE}){
+function contract(abi, to = "0x878abceef589ee465cfd7df1105392425f96793f", options = { from: hmy.crypto.fromBech32(address), gas: '210000', gasPrice: GAS_PRICE }) {
   let contract = hmy.contracts.createContract(abi, to, options);
-  contract.wallet.signTransaction = window.harmony.signTransaction;
-  let decodeParameters = (abi,hexdata)=>{
-    if(0 == abi.length)
+  contract.wallet.signTransaction = window.harmony.signTransaction; // or importPrivate
+  let decodeParameters = (abi, hexdata) => {
+    if (0 == abi.length)
       return [];
-    let params = contract.abiCoder.decodeParameters(abi,hexdata);
+    let params = contract.abiCoder.decodeParameters(abi, hexdata);
     params.length = abi.length;
     return params;
   };
-  for(let name in contract.abiModel.getMethods()){
+  for (let name in contract.abiModel.getMethods()) {
     let method = contract.abiModel.getMethod(name);
-    method.decodeInputs = hexData=>decodeParameters(method.inputs, hexData);
-    method.decodeOutputs = hexData=>decodeParameters(method.outputs, hexData);
+    method.decodeInputs = hexData => decodeParameters(method.inputs, hexData);
+    method.decodeOutputs = hexData => decodeParameters(method.outputs, hexData);
   }
 
-  contract.decodeInput = (hexData)=>{
-    let no0x = hexData.startsWith('0x')?hexData.slice(2):hexData;
-    let sig = no0x.slice(0,8).toLowerCase();
-    let method = contract.abiModel.getMethod('0x'+sig);
-    if(!method) return false;
+  contract.decodeInput = (hexData) => {
+    let no0x = hexData.startsWith('0x') ? hexData.slice(2) : hexData;
+    let sig = no0x.slice(0, 8).toLowerCase();
+    let method = contract.abiModel.getMethod('0x' + sig);
+    if (!method) return false;
     let obj = {
       name: method.name,
-      params: method.decodeInputs('0x'+no0x.slice(8))
+      params: method.decodeInputs('0x' + no0x.slice(8))
     }
-    obj.toString = ()=>{
+    obj.toString = () => {
       let str = obj.name + '(';
-      for(let i = 0; i < obj.params.length; i++){
-        if(i>0) str += ',';
-        str+=obj.params[i];
+      for (let i = 0; i < obj.params.length; i++) {
+        if (i > 0) str += ',';
+        str += obj.params[i];
       }
-      str+=')';
+      str += ')';
       return str;
     }
     return obj;
@@ -161,14 +164,22 @@ function contract(abi, to, options={from:hmy.crypto.fromBech32(address), gas:'21
   return contract;
 }
 
+function contractDeploy(abi, code, _arguments) {
+  let contractObj = contract(abi, "0x");
+  return contractObj.deploy({
+    data: code,
+    arguments: _arguments
+  })
+}
+
 async function txSignSend(tx) {
   await window.harmony.signTransaction(tx);
   let ret = await tx.sendTransaction();
-  if(ret[1] != tx.id) throw {message:ret[1]};
+  if (ret[1] != tx.id) throw { message: ret[1] };
   return tx;
 }
 
-export default {
+module.exports  ={
   hmy,
   login,
   logout,
@@ -177,6 +188,7 @@ export default {
   undelegate,
   withdrawReward,
   txSignSend,
-  contract
+  contract,
+  contractDeploy
 }
 

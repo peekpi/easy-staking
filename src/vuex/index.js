@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from "axios"
 
-import * as crypto from "@harmony-js/crypto"
+//import * as crypto from "@harmony-js/crypto"
 
 import hmy from "../js/hmy.js"
 
@@ -10,25 +10,19 @@ const queryString = require("query-string");
 
 Vue.use(Vuex);
 
-//https://staking-explorer2-268108.appspot.com/networks/harmony-partnernet/validators_with_page?active=false&page=0&search=&size=50&sortOrder=desc&sortProperty=total_stake
-//https://staking-explorer2-268108.appspot.com/networks/harmony-open-staking/validators_with_page?active=true&page=0&search=&size=20&sortOrder=desc&sortProperty=total_stake
-//https://staking-explorer2-268108.appspot.com/networks/harmony/validators_with_page?active=true&page=0&sea
-//http://hmy.easy-staking.com:8090/networks/harmony/validators_with_page?active=true&page=1&search=&size=20&sortOrder=desc&sortProperty=total_stake
-const API_URL = "https://hmy.easy-staking.com:8098";
-//const API_URL = "http://staking.hmny.io";
-const networkId = "harmony";
+const API_URL = "https://hmny-t.co";
+const networkId = "mainnet";
 
-function remapValidator(
+function remapValidator (
   validator,
   convertAddress = false
 ) {
+  convertAddress;
   return {
     ...validator,
     userName: validator.name,
 
-    operator_address: convertAddress
-      ? crypto.getAddress(validator["address"]).bech32
-      : validator["address"],
+    operator_address: validator["address"],
 
     rate: validator.rate,
     max_rate: validator["max-rate"],
@@ -64,6 +58,11 @@ function remapValidator(
   }
 }
 
+function fetchValidatorByAddress(address) {
+  return axios
+    .get(`${API_URL}/networks/${networkId}/validators/${address}`)
+    .then(rez => remapValidator(rez.data, false))
+}
 
 function fetchDelegationsByAddress(address) {
   return axios
@@ -74,6 +73,17 @@ function fetchDelegationsByAddress(address) {
       })
       return rez.data;
     })
+}
+
+function fetchValidators(){
+  return axios
+   .get(`${API_URL}/networks/${networkId}/validators?`)
+   .then(rez => {
+     const validators = rez.data.validators.map((v) =>
+       remapValidator(v, false)
+     )
+     return { ...rez.data, validators }
+   })
 }
 
 function fetchValidatorsWithParams(page = 0, size = 50, sortProperty="apr", active=true, search="") {
@@ -100,6 +110,7 @@ function fetchValidatorsWithParams(page = 0, size = 50, sortProperty="apr", acti
       return { ...rez.data, validators }
     })
 }
+fetchValidatorsWithParams;
 
 async function updateBalance(account) {
   if (account.address != undefined) {
@@ -109,8 +120,23 @@ async function updateBalance(account) {
   return account;
 }
 
-let page = 0;
+function filter(validators, cfg) {
+  if(cfg.active)
+    validators = validators.filter(v=>v.active)
+  if(cfg.search)
+    validators = validators.filter(v=>{
+      const combination = v.address + v.name + v.identity;
+      return combination.search(cfg.search)
+    })
+  if(cfg.sortProperty == 'apr')
+    validators.sort((a,b)=>b.apr*(1-b.rate) - a.apr*(1-a.rate))
+  else
+    validators.sort((a,b)=>b.total_stake - a.total_stake)
+  return validators;
+}
+
 let needUpdate = true;
+const pageSize = 32;
 export default new Vuex.Store({
   state: {
     account: {},
@@ -120,6 +146,7 @@ export default new Vuex.Store({
     totalActive: 0,
     totalFound: 0,
     validators: [],
+    validatorsDetial:{},
     loading: false,
     loaded: false,
     txRecord: [],
@@ -127,15 +154,21 @@ export default new Vuex.Store({
       active: true,
       search: "",
       sortProperty: "apr"
-    }
+    },
+    pages: 1,
   },
   mutations: {
+    setPage(state, _page){
+      state.pages = _page;
+    },
     setAccount(state, account) {
       state.account = account;
     },
     clearValidators(state) {
-      page=0;
       state.validators = [];
+    },
+    setValidatorDetail(state, validator) {
+      state.validatorsDetial[validator.address] = validator;
     },
     appendValidators(state, validators) {
       state.validators = state.validators.concat(validators);
@@ -173,18 +206,31 @@ export default new Vuex.Store({
         sortProperty: sortProperty == undefined ? oldCfg.sortProperty : sortProperty
       }
       state.reqConfig = cfg;
+
+      state.pages = 1;
     }
   },
   actions: {
+    async getValidator(context, address){
+      if(context.state.validatorsDetial[address]) return context.state.validatorsDetial[address];
+      const validator = await fetchValidatorByAddress(address);
+      context.commit("setValidatorDetail", validator);
+      return validator;
+    },
     async getValidators(context) {
-      if (context.state.totalActive && context.state.totalActive == context.state.validators.length)
-        return 0;
+      if (context.state.validators.length){
+        const pages = context.state.pages;
+        let remain = context.state.validators.length - pages * pageSize;
+        if(remain > 0) context.commit("setPage", pages+1);
+        if(remain < 0) remain = 0;
+        return remain >= pageSize ? pageSize : remain;
+      }
       let commit = context.commit;
-      let cfg =  context.state.reqConfig;
-      let data = await fetchValidatorsWithParams(page, 20, cfg.sortProperty, cfg.active, cfg.search);
+      //let cfg =  context.state.reqConfig;
+      //let data = await fetchValidatorsWithParams(page, 20, cfg.sortProperty, cfg.active, cfg.search);
+      const data =  await fetchValidators();
       commit("setLoaded", true);
       if (data.validators.length) {
-        page++;
         commit("appendValidators", data.validators);
         commit("setTotal", data.total);
         commit("setTotalActive", data.total_active);
@@ -195,8 +241,9 @@ export default new Vuex.Store({
     async updateDelegations(context) {
       if(!needUpdate) return
       needUpdate = false;
-      let data = await fetchDelegationsByAddress(context.state.account.address);
+      const data = await fetchDelegationsByAddress(context.state.account.address);
       context.commit("setDelegations", data);
+      data.forEach(validator => context.commit("setValidatorDetail", validator.validator_info));
     },
     async updateWithAccount(context, account){
       await updateBalance(account);
@@ -229,6 +276,11 @@ export default new Vuex.Store({
           context.dispatch("updateWithAccount", context.state.account);
         }
       ).catch(fun)
+    }
+  },
+  getters: {
+    validators: state => {
+      return filter(state.validators, state.reqConfig).slice(0, state.pages*pageSize)
     }
   }
 })

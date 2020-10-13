@@ -15,7 +15,7 @@
                 </card>
                 <ListItem v-for="(item, index) in validDelegations" :key="index">
                     {{ index+1 }}
-                    <ValidatorLogo :address="item.validator_address" />
+                    <ValidatorLogo :address="item.validator_address" :hasLogo="item.validator_info.hasLogo" />
                     <ListItemMeta
                         :title="shortName(item.validator_info.name)"
                         v-on:click.native="titleClick(item)"
