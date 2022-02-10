@@ -15,7 +15,7 @@
     "bignumber.js": "^9.0.0",
     "core-js": "^3.6.4",
     "jdenticon": "2.2.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "query-string": "^6.12.1",
     "sass-loader": "^8.0.2",
     "schema-utils": "^2.6.6",
